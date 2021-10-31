@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@TeleOp(name = "Concept: MecanumTeleOp", group = "Test")
+@TeleOp(name = "Concept: FieldCentricMecanumTeleOp", group = "Test")
 //@Disabled
 public class FieldOrientedDrive extends LinearOpMode {
     //The Stuff(variables)
@@ -65,7 +65,7 @@ public class FieldOrientedDrive extends LinearOpMode {
 
         while (opModeIsActive()) {
             //gets angle from imu
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.RADIANS);
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
             //creates vector
             Vector vector = new Vector();
             vector.setCartesian(gamepad1.left_stick_x, gamepad1.left_stick_y);
@@ -78,10 +78,10 @@ public class FieldOrientedDrive extends LinearOpMode {
 
             double rx = gamepad1.right_stick_x;
 
-            double frontLeftPower = vector.getY() + vector.getX() + rx;
-            double backLeftPower = vector.getY() - vector.getX() + rx;
-            double frontRightPower = vector.getY() - vector.getX() - rx;
-            double backRightPower = vector.getY() + vector.getX() - rx;
+            double frontLeftPower = -vector.getY() + vector.getX() + rx;
+            double backLeftPower = -vector.getY() - vector.getX() + rx;
+            double frontRightPower = -vector.getY() - vector.getX() - rx;
+            double backRightPower = -vector.getY() + vector.getX() - rx;
 
             if (Math.abs(frontLeftPower) > 1 ||
                     Math.abs(backLeftPower) > 1 ||
@@ -102,9 +102,9 @@ public class FieldOrientedDrive extends LinearOpMode {
             }
 
             frontLeftMotor.setPower(-frontLeftPower);
-            backLeftMotor.setPower(backLeftPower);
+            backLeftMotor.setPower(-backLeftPower);
             frontRightMotor.setPower(-frontRightPower);
-            backRightMotor.setPower(backRightPower);
+            backRightMotor.setPower(-backRightPower);
         }
 
     }
