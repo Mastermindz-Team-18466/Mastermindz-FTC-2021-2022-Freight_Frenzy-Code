@@ -2,8 +2,15 @@ package org.firstinspires.ftc.teamcode;
 
 public class Vector
 {
-    private double x = 0;
-    private double y = 0;
+    private double x;
+    private double y;
+    private double dir;
+
+    public Vector(double d) {
+        this.x = 0;
+        this.y = 0;
+        this.dir = d;
+    }
 
     public void setCartesian(double x, double y)
     {

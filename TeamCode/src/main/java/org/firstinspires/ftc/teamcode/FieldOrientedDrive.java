@@ -67,7 +67,7 @@ public class FieldOrientedDrive extends LinearOpMode {
             //gets angle from imu
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.RADIANS);
             //creates vector
-            Vector vector = new Vector();
+            Vector vector = new Vector(15);
             vector.setCartesian(gamepad1.left_stick_x, gamepad1.left_stick_y);
             vector.rotateDegrees(angles.firstAngle - offset);
 
