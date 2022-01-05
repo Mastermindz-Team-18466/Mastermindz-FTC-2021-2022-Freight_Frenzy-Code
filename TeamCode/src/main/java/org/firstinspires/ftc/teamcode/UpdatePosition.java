@@ -5,40 +5,38 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@TeleOp(name = "Concept: FieldCentricMecanumTeleOp", group = "Test")
-//@Disabled
-public class FieldOrientedDrive extends LinearOpMode {
-    //The Stuff(variables)
-    ElapsedTime runtime = new ElapsedTime();
-    DcMotor backLeftMotor;
-    DcMotor frontLeftMotor;
-    DcMotor backRightMotor;
-    DcMotor frontRightMotor;
+@TeleOp
+public class UpdatePosition extends LinearOpMode {
 
+    DcMotor backLeftMotor, frontLeftMotor, backRightMotor, frontRightMotor;
+    DcMotor leftEncoder, rightEncoder, middleEncoder;
+
+    static final double TICKS_PER_REV = 8192;
+    static final double WHEEL_DIAMETER = 100/25.4;
+    static final double GEAR_RATIO = 1;
+
+    static final double TICKS_PER_INCH = WHEEL_DIAMETER * Math.PI * GEAR_RATIO / TICKS_PER_REV;
+
+    double offset = 0;
     BNO055IMU imu;
     Orientation angles;
 
-    double offset = 0;
+    GlobalCoordinateSystem positionUpdate;
 
     @Override
-    public void runOpMode() {
-        //Set Up The Hardware
+    public void runOpMode() throws InterruptedException {
         //IMU
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-
-        //left back motor
+        //Left back motor
         backLeftMotor = hardwareMap.get(DcMotor.class, "leftBack_drive");
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -58,13 +56,20 @@ public class FieldOrientedDrive extends LinearOpMode {
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        //Encoders
+        leftEncoder = hardwareMap.get(DcMotor.class, "leftEncoder");
+        rightEncoder = hardwareMap.get(DcMotor.class, "rightEncoder");
+        middleEncoder = hardwareMap.get(DcMotor.class, "middleEncoder");
 
-        //LETS GO!!!!!
+        resetEncoders();
+
         waitForStart();
-        runtime.reset();
+
+        positionUpdate = new GlobalCoordinateSystem(leftEncoder, rightEncoder, middleEncoder, TICKS_PER_INCH, 100);
+        Thread position = new Thread(positionUpdate);
+        position.start();
 
         while (opModeIsActive()) {
-            //gets angle from imu
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
             //creates vector
             Vector vector = new Vector(15);
@@ -105,7 +110,25 @@ public class FieldOrientedDrive extends LinearOpMode {
             backLeftMotor.setPower(-backLeftPower);
             frontRightMotor.setPower(-frontRightPower);
             backRightMotor.setPower(-backRightPower);
+
+            telemetry.addData("[X Position]", positionUpdate.returnXCoordinate() / TICKS_PER_INCH);
+            telemetry.addData("[Y Position]", positionUpdate.returnYCoordinate() / TICKS_PER_INCH);
+            telemetry.addData("[Orientation (360)]", positionUpdate.returnOrientation());
+            telemetry.update();
         }
 
+        positionUpdate.stop();
+    }
+
+    private void resetEncoders() {
+        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
