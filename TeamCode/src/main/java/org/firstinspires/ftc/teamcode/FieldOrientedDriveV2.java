@@ -13,11 +13,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+
 public class FieldOrientedDriveV2 {
     //The Stuff(variables)
     Hardware hardware = new Hardware();
     ElapsedTime runtime = new ElapsedTime();
     Vector vector;
+
+    BNO055IMU imu;
+    Orientation angles;
 
     double offset = 0;
 
@@ -67,6 +71,11 @@ public class FieldOrientedDriveV2 {
         hardware.left_back_driver.setPower(-backLeftPower);
         hardware.right_front_driver.setPower(-frontRightPower);
         hardware.right_back_driver.setPower(-backRightPower);
+
+        frontLeftMotor.setPower(-frontLeftPower);
+        backLeftMotor.setPower(-backLeftPower);
+        frontRightMotor.setPower(-frontRightPower);
+        backRightMotor.setPower(-backRightPower);
     }
 
     public void finish() {
