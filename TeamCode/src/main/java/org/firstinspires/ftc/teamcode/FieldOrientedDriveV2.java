@@ -13,8 +13,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@TeleOp(name = "Concept: MecanumTeleOp", group = "Test")
-//@Disabled
 
 public class FieldOrientedDriveV2 {
     //The Stuff(variables)
@@ -27,7 +25,6 @@ public class FieldOrientedDriveV2 {
     Vector vector;
 
     BNO055IMU imu;
-    BNO055IMU.Parameters parameters;
     Orientation angles;
 
     double offset = 0;
@@ -63,7 +60,7 @@ public class FieldOrientedDriveV2 {
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    public void move(double power, double ticks, double targetAngle) {
+    public void move() {
         //gets angle from imu
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
         //creates vector
@@ -105,8 +102,6 @@ public class FieldOrientedDriveV2 {
         backLeftMotor.setPower(-backLeftPower);
         frontRightMotor.setPower(-frontRightPower);
         backRightMotor.setPower(-backRightPower);
-
-        finish();
     }
 
     public void finish() {
@@ -114,15 +109,5 @@ public class FieldOrientedDriveV2 {
         backLeftMotor.setPower(0);
         frontRightMotor.setPower(0);
         backRightMotor.setPower(0);
-
-        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }

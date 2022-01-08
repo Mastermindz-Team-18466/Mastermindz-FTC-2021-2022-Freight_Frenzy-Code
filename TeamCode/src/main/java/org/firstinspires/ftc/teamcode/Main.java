@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.ConceptGamepadRumb
 //@Disabled
 public class Main extends LinearOpMode {
 
+    slides slides;
     FieldOrientedDriveV2 driver;
     Gamepad gamepad;
 
@@ -29,7 +30,9 @@ public class Main extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            driver.move(1, 1000, 15);
+            driver.move();
+
+            slides.update();
 
             telemetry.addData("Vector X", driver.vector.getX());
             telemetry.addData("Vector Y", driver.vector.getY());
