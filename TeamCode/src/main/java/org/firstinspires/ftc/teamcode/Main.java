@@ -12,27 +12,20 @@ import org.firstinspires.ftc.robotcontroller.external.samples.ConceptGamepadRumb
 //@Disabled
 public class Main extends LinearOpMode {
 
-    slides slides;
+    SlidesPID slides;
     FieldOrientedDriveV2 driver;
     Gamepad gamepad;
 
     @Override
     public void runOpMode() {
-        driver = new FieldOrientedDriveV2(
-                hardwareMap.get(DcMotor.class, "leftBack_driver"),
-                hardwareMap.get(DcMotor.class, "leftFront_driver"),
-                hardwareMap.get(DcMotor.class, "rightBack_driver"),
-                hardwareMap.get(DcMotor.class, "rightFront_driver"),
-                hardwareMap.get(BNO055IMU.class, "imu"),
-                gamepad
-        );
+        driver = new FieldOrientedDriveV2();
 
         waitForStart();
 
         while (opModeIsActive()) {
             driver.move();
 
-            slides.update();
+            slides.control();
 
             telemetry.addData("Vector X", driver.vector.getX());
             telemetry.addData("Vector Y", driver.vector.getY());

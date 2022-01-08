@@ -10,16 +10,18 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 
 @Autonomous(name = "Barcode Autonomous")
 public class BarcodeAutonomous extends LinearOpMode {
-    private OpenCvInternalCamera webcam;
+    Hardware hardware = new Hardware();
     private BarcodeDetector detector;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        hardware.init(hardwareMap);
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-        webcam.openCameraDevice();
-        webcam.setPipeline(detector);
-        webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+        hardware.webcam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        hardware.webcam.openCameraDevice();
+        hardware.webcam.setPipeline(detector);
+        hardware.webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
 
         while (opModeIsActive())
         {

@@ -13,10 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @TeleOp
 public class UpdatePosition extends LinearOpMode {
-
-    DcMotor backLeftMotor, frontLeftMotor, backRightMotor, frontRightMotor;
-    DcMotor leftEncoder, rightEncoder, middleEncoder;
-
+    Hardware hardware = new Hardware();
     static final double TICKS_PER_REV = 8192;
     static final double WHEEL_DIAMETER = 100/25.4;
     static final double GEAR_RATIO = 1;
@@ -31,41 +28,13 @@ public class UpdatePosition extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //IMU
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-
-        //Left back motor
-        backLeftMotor = hardwareMap.get(DcMotor.class, "leftBack_drive");
-        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        //Right Back Motor
-        backRightMotor = hardwareMap.get(DcMotor.class, "rightBack_drive");
-        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        //Left Front Motor
-        frontLeftMotor = hardwareMap.get(DcMotor.class, "leftFront_drive");
-        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        //Right Back Motor
-        frontRightMotor = hardwareMap.get(DcMotor.class, "rightFront_drive");
-        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        //Encoders
-        leftEncoder = hardwareMap.get(DcMotor.class, "leftEncoder");
-        rightEncoder = hardwareMap.get(DcMotor.class, "rightEncoder");
-        middleEncoder = hardwareMap.get(DcMotor.class, "middleEncoder");
+        hardware.init(hardwareMap);
 
         resetEncoders();
 
         waitForStart();
 
-        positionUpdate = new GlobalCoordinateSystem(leftEncoder, rightEncoder, middleEncoder, TICKS_PER_INCH, 100);
+        positionUpdate = new GlobalCoordinateSystem(TICKS_PER_INCH, 100);
         Thread position = new Thread(positionUpdate);
         position.start();
 
@@ -106,10 +75,10 @@ public class UpdatePosition extends LinearOpMode {
                 backRightPower /= max;
             }
 
-            frontLeftMotor.setPower(-frontLeftPower);
-            backLeftMotor.setPower(-backLeftPower);
-            frontRightMotor.setPower(-frontRightPower);
-            backRightMotor.setPower(-backRightPower);
+            hardware.left_front_driver.setPower(-frontLeftPower);
+            hardware.left_back_driver.setPower(-backLeftPower);
+            hardware.right_front_driver.setPower(-frontRightPower);
+            hardware.right_back_driver.setPower(-backRightPower);
 
             telemetry.addData("[X Position]", positionUpdate.returnXCoordinate() / TICKS_PER_INCH);
             telemetry.addData("[Y Position]", positionUpdate.returnYCoordinate() / TICKS_PER_INCH);
@@ -121,14 +90,14 @@ public class UpdatePosition extends LinearOpMode {
     }
 
     private void resetEncoders() {
-        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardware.left_front_driver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardware.left_back_driver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardware.right_front_driver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardware.right_back_driver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hardware.left_front_driver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hardware.left_back_driver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hardware.right_front_driver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hardware.right_back_driver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }

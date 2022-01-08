@@ -10,8 +10,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import java.io.File;
 
 public class GlobalCoordinateSystem implements Runnable {
-
-    DcMotor leftEncoder, rightEncoder, middleEncoder;
+    Hardware hardware = new Hardware();
     boolean isRunning = true;
     double leftEncoderPosition, rightEncoderPosition, middleEncoderPosition;
     double changeInOrientation;
@@ -24,10 +23,8 @@ public class GlobalCoordinateSystem implements Runnable {
     File sideWheelsSeparationFile = AppUtil.getInstance().getSettingsFile("sideWheelsSeparationFile");
     File middleTickOffsetFile = AppUtil.getInstance().getSettingsFile("middleTickOffsetFile");
 
-    public GlobalCoordinateSystem(DcMotor leftEncoder, DcMotor rightEncoder, DcMotor middleEncoder, double TICKS_PER_INCH, int threadSleepDelay) {
-        this.leftEncoder = leftEncoder;
-        this.rightEncoder = rightEncoder;
-        this.middleEncoder = middleEncoder;
+    public GlobalCoordinateSystem(double TICKS_PER_INCH, int threadSleepDelay) {
+        hardware.init(hardware.hardwareMap);
         sleepTime = threadSleepDelay;
 
         encoderWheelDistance = Double.parseDouble(ReadWriteFile.readFile(sideWheelsSeparationFile).trim()) * TICKS_PER_INCH;
@@ -35,8 +32,8 @@ public class GlobalCoordinateSystem implements Runnable {
     }
 
     public void positionUpdate() {
-        leftEncoderPosition = leftEncoder.getCurrentPosition();
-        rightEncoderPosition = rightEncoder.getCurrentPosition();
+        leftEncoderPosition = hardware.left_encoder.getCurrentPosition();
+        rightEncoderPosition = hardware.right_encoder.getCurrentPosition();
 
         double leftChange = leftEncoderPosition - OLDLeftEncoderPosition;
         double rightChange = rightEncoderPosition - OLDRightEncoderPosition;
@@ -44,7 +41,7 @@ public class GlobalCoordinateSystem implements Runnable {
         changeInOrientation = (leftChange - rightChange) / encoderWheelDistance;
         robotOrientation += changeInOrientation;
 
-        middleEncoderPosition = middleEncoder.getCurrentPosition();
+        middleEncoderPosition = hardware.middle_encoder.getCurrentPosition();
         double rawHorizontalChange = middleEncoderPosition - OLDMiddleEncoderPosition;
         double horizontalChange = rawHorizontalChange - (changeInOrientation * middleEncoderPosition);
 
