@@ -65,37 +65,46 @@ public class FieldOrientedDriveV2 {
 
     public void move(double power, double ticks, double targetAngle) {
         //gets angle from imu
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
         //creates vector
-        //vector = new Vector(15);
-        //vector.setCartesian(gamepad1.left_stick_x, gamepad1.left_stick_y);
-        //vector.rotateDegrees(angles.firstAngle - offset);
-        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.RADIANS);
+        Vector vector = new Vector(15);
+        vector.setCartesian(gamepad1.left_stick_x, gamepad1.left_stick_y);
+        vector.rotateDegrees(angles.firstAngle - offset);
 
 
         if(gamepad1.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
             offset = angles.firstAngle;
         }
 
-        double leftPower;
-        double rightPower;
+        double rx = gamepad1.right_stick_x;
 
-        backLeftMotor.setPower(power);
-        backRightMotor.setPower(power);
-        frontLeftMotor.setPower(power);
-        frontRightMotor.setPower(power);
+        double frontLeftPower = -vector.getY() + vector.getX() + rx;
+        double backLeftPower = -vector.getY() - vector.getX() + rx;
+        double frontRightPower = -vector.getY() - vector.getX() - rx;
+        double backRightPower = -vector.getY() + vector.getX() - rx;
 
-        while(backLeftMotor.getCurrentPosition() < ticks && frontLeftMotor.getCurrentPosition() < ticks) {
-            if (angles.firstAngle < targetAngle) {
-                rightPower = power + 0.5;
-                leftPower = power - 0.5;
-            } else if (angles.firstAngle > targetAngle) {
-                rightPower = power - 0.5;
-                leftPower = power + 0.5;
-            } else {
-                rightPower = power;
-                leftPower = power;
-            }
+        if (Math.abs(frontLeftPower) > 1 ||
+                Math.abs(backLeftPower) > 1 ||
+                Math.abs(frontRightPower) > 1 ||
+                Math.abs(backRightPower) > 1) {
+            // Find the largest power
+            double max = 0;
+            max = Math.max(Math.abs(frontLeftPower), Math.abs(backLeftPower));
+            max = Math.max(Math.abs(frontRightPower), max);
+            max = Math.max(Math.abs(backRightPower), max);
+
+            // Divide everything by max (it's positive so we don't need to worry
+            // about signs)
+            frontLeftPower /= max;
+            backLeftPower /= max;
+            frontRightPower /= max;
+            backRightPower /= max;
         }
+
+        frontLeftMotor.setPower(-frontLeftPower);
+        backLeftMotor.setPower(-backLeftPower);
+        frontRightMotor.setPower(-frontRightPower);
+        backRightMotor.setPower(-backRightPower);
 
         finish();
     }
