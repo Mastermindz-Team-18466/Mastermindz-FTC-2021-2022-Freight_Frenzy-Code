@@ -5,11 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 @Config
 public class SlidesPID {
+    Hardware hardware = new Hardware();
 
-    DcMotor linear_slide;
     double currentPosition = 0;
     public static double kp = 0.007;
 
@@ -22,11 +23,8 @@ public class SlidesPID {
 
     double goal = 0;
 
-    public SlidesPID(DcMotor ls, double x, GoalPosition position) {
-        this.linear_slide = ls;
-
-        linear_slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        linear_slide.setDirection(DcMotorSimple.Direction.FORWARD);
+    public SlidesPID(double x, GoalPosition position) {
+        hardware.init(hardware.hardwareMap);
 
         this.currentPosition = x;
 
@@ -50,7 +48,8 @@ public class SlidesPID {
     }
 
     public void adjust() {
-        linear_slide.setPower(control(currentPosition, goal));
+        hardware.left_linear_slide.setPower(control(currentPosition, goal));
+        hardware.right_linear_slide.setPower(control(currentPosition, goal));
         currentPosition += control(currentPosition, goal);
 
         if (currentPosition == goal) {
@@ -68,6 +67,7 @@ public class SlidesPID {
     }
 
     public void reset() {
-        linear_slide.setPower(0);
+        hardware.left_linear_slide.setPower(0);
+        hardware.right_linear_slide.setPower(0);
     }
 }

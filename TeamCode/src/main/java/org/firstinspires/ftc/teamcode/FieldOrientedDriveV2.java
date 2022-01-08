@@ -15,65 +15,30 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class FieldOrientedDriveV2 {
     //The Stuff(variables)
+    Hardware hardware = new Hardware();
     ElapsedTime runtime = new ElapsedTime();
-    DcMotor backLeftMotor;
-    DcMotor frontLeftMotor;
-    DcMotor backRightMotor;
-    DcMotor frontRightMotor;
-    Gamepad gamepad1;
     Vector vector;
-
-    BNO055IMU imu;
-    BNO055IMU.Parameters parameters;
-    Orientation angles;
 
     double offset = 0;
 
-    public FieldOrientedDriveV2(DcMotor blm, DcMotor flm, DcMotor brm, DcMotor frm, BNO055IMU i, Gamepad g) {
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-
-        this.imu = i;
-        this.backLeftMotor = blm;
-        this.backRightMotor = brm;
-        this.frontRightMotor = frm;
-        this.frontLeftMotor = flm;
-        this.gamepad1 = g;
-
-        imu.initialize(parameters);
-
-        //left back motor
-        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        //Right Back Motor
-        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        //Left Front Motor
-        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        //Right Back Motor
-        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+    public FieldOrientedDriveV2() {
+        hardware.init(hardware.hardwareMap);
     }
 
-    public void move(double power, double ticks, double targetAngle) {
+    public void move() {
         //gets angle from imu
-        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
+        hardware.angles = hardware.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
         //creates vector
         Vector vector = new Vector(15);
-        vector.setCartesian(gamepad1.left_stick_x, gamepad1.left_stick_y);
-        vector.rotateDegrees(angles.firstAngle - offset);
+        vector.setCartesian(hardware.gamepad.left_stick_x, hardware.gamepad.left_stick_y);
+        vector.rotateDegrees(hardware.angles.firstAngle - offset);
 
 
-        if(gamepad1.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
-            offset = angles.firstAngle;
+        if(hardware.gamepad.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
+            offset = hardware.angles.firstAngle;
         }
 
-        double rx = gamepad1.right_stick_x;
+        double rx = hardware.gamepad.right_stick_x;
 
         double frontLeftPower = -vector.getY() + vector.getX() + rx;
         double backLeftPower = -vector.getY() - vector.getX() + rx;
@@ -98,15 +63,16 @@ public class FieldOrientedDriveV2 {
             backRightPower /= max;
         }
 
-        frontLeftMotor.setPower(-frontLeftPower);
-        backLeftMotor.setPower(-backLeftPower);
-        frontRightMotor.setPower(-frontRightPower);
+        hardware.left_front_driver.setPower(-frontLeftPower);
+        hardware.left_back_driver.setPower(-backLeftPower);
+        hardware.right_front_driver.setPower(-frontRightPower);
+        hardware.right_back_driver.setPower(-backRightPower);
     }
 
     public void finish() {
-        frontLeftMotor.setPower(0);
-        backLeftMotor.setPower(0);
-        frontRightMotor.setPower(0);
-        backRightMotor.setPower(0);
+        hardware.left_front_driver.setPower(0);
+        hardware.left_back_driver.setPower(0);
+        hardware.right_front_driver.setPower(0);
+        hardware.right_back_driver.setPower(0);
     }
 }

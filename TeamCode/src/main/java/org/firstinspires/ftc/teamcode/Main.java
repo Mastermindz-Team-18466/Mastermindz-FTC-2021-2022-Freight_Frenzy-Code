@@ -17,19 +17,12 @@ public class Main extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        driver = new FieldOrientedDriveV2(
-                hardwareMap.get(DcMotor.class, "leftBack_driver"),
-                hardwareMap.get(DcMotor.class, "leftFront_driver"),
-                hardwareMap.get(DcMotor.class, "rightBack_driver"),
-                hardwareMap.get(DcMotor.class, "rightFront_driver"),
-                hardwareMap.get(BNO055IMU.class, "imu"),
-                gamepad
-        );
+        driver = new FieldOrientedDriveV2();
 
         waitForStart();
 
         while (opModeIsActive()) {
-            driver.move(1, 1000, 15);
+            driver.move();
 
             telemetry.addData("Vector X", driver.vector.getX());
             telemetry.addData("Vector Y", driver.vector.getY());

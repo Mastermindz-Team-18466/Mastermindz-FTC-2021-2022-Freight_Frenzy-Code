@@ -16,9 +16,7 @@ import java.io.File;
 
 @Autonomous
 public class Calibration extends LinearOpMode {
-    DcMotor backLeftMotor, frontLeftMotor, backRightMotor, frontRightMotor;
-    DcMotor leftEncoder, rightEncoder, middleEncoder;
-    BNO055IMU imu;
+    Hardware hardware = new Hardware();
     ElapsedTime timer = new ElapsedTime();
 
     static final double calibrationSpeed = 0.5;
@@ -34,76 +32,46 @@ public class Calibration extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-
-        //Left back motor
-        backLeftMotor = hardwareMap.get(DcMotor.class, "leftBack_drive");
-        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        //Right Back Motor
-        backRightMotor = hardwareMap.get(DcMotor.class, "rightBack_drive");
-        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        //Left Front Motor
-        frontLeftMotor = hardwareMap.get(DcMotor.class, "leftFront_drive");
-        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        //Right Back Motor
-        frontRightMotor = hardwareMap.get(DcMotor.class, "rightFront_drive");
-        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        //Encoders
-        leftEncoder = hardwareMap.get(DcMotor.class, "leftEncoder");
-        rightEncoder = hardwareMap.get(DcMotor.class, "rightEncoder");
-        middleEncoder = hardwareMap.get(DcMotor.class, "middleEncoder");
+        hardware.init(hardwareMap);
 
         resetEncoders();
 
         waitForStart();
 
-        while(imu.getAngularOrientation().firstAngle < 90 && opModeIsActive()) {
-            frontRightMotor.setPower(-calibrationSpeed);
-            backRightMotor.setPower(-calibrationSpeed);
-            frontLeftMotor.setPower(calibrationSpeed);
-            backLeftMotor.setPower(calibrationSpeed);
+        while(hardware.imu.getAngularOrientation().firstAngle < 90 && opModeIsActive()) {
+            hardware.right_front_driver.setPower(-calibrationSpeed);
+            hardware.right_back_driver.setPower(-calibrationSpeed);
+            hardware.left_front_driver.setPower(calibrationSpeed);
+            hardware.left_back_driver.setPower(calibrationSpeed);
 
-            if (imu.getAngularOrientation().firstAngle < 60) {
-                frontRightMotor.setPower(-calibrationSpeed);
-                backRightMotor.setPower(-calibrationSpeed);
-                frontLeftMotor.setPower(calibrationSpeed);
-                backLeftMotor.setPower(calibrationSpeed);
+            if (hardware.imu.getAngularOrientation().firstAngle < 60) {
+                hardware.right_front_driver.setPower(-calibrationSpeed);
+                hardware.right_back_driver.setPower(-calibrationSpeed);
+                hardware.left_front_driver.setPower(calibrationSpeed);
+                hardware.left_back_driver.setPower(calibrationSpeed);
             } else {
-                frontRightMotor.setPower(-calibrationSpeed / 2);
-                backRightMotor.setPower(-calibrationSpeed / 2);
-                frontLeftMotor.setPower(calibrationSpeed / 2);
-                backLeftMotor.setPower(calibrationSpeed / 2);
+                hardware.right_front_driver.setPower(-calibrationSpeed / 2);
+                hardware.right_back_driver.setPower(-calibrationSpeed / 2);
+                hardware.left_front_driver.setPower(calibrationSpeed / 2);
+                hardware.left_back_driver.setPower(calibrationSpeed / 2);
             }
         }
 
-        frontRightMotor.setPower(0);
-        backRightMotor.setPower(0);
-        frontLeftMotor.setPower(0);
-        backLeftMotor.setPower(0);
+        hardware.right_front_driver.setPower(0);
+        hardware.right_back_driver.setPower(0);
+        hardware.left_front_driver.setPower(0);
+        hardware.left_back_driver.setPower(0);
 
         timer.reset();
         while (timer.seconds() < 1 && opModeIsActive()) {
 
         }
 
-        double angle = imu.getAngularOrientation().firstAngle;
-        double encoderDifference = Math.abs(Math.abs(leftEncoder.getCurrentPosition()) - Math.abs(rightEncoder.getCurrentPosition()));
+        double angle = hardware.imu.getAngularOrientation().firstAngle;
+        double encoderDifference = Math.abs(Math.abs(hardware.left_encoder.getCurrentPosition()) - Math.abs(hardware.right_encoder.getCurrentPosition()));
         double sideEncoderTickOffset = encoderDifference / angle;
         double sideWheelsSeparation = (180 * sideEncoderTickOffset) / (TICKS_PER_INCH * Math.PI);
-        double middleWheelOffset = middleEncoder.getCurrentPosition() / Math.toRadians(imu.getAngularOrientation().firstAngle);
+        double middleWheelOffset = hardware.middle_encoder.getCurrentPosition() / Math.toRadians(hardware.imu.getAngularOrientation().firstAngle);
 
         ReadWriteFile.writeFile(sideWheelsSeparationFile, String.valueOf(sideWheelsSeparation));
         ReadWriteFile.writeFile(middleTickOffsetFile, String.valueOf(middleWheelOffset));
@@ -114,14 +82,14 @@ public class Calibration extends LinearOpMode {
     }
 
     private void resetEncoders() {
-        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardware.left_front_driver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardware.left_back_driver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardware.right_front_driver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardware.right_back_driver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hardware.left_front_driver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hardware.left_back_driver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hardware.right_front_driver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hardware.right_back_driver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
