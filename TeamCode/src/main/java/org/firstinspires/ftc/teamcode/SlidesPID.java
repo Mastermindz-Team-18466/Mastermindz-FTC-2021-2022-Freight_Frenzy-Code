@@ -7,11 +7,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Config
 public class SlidesPID {
     Hardware hardware = new Hardware();
 
-    double currentPosition = 0;
     public static double kp = 0.007;
 
     public enum GoalPosition {
@@ -21,49 +23,48 @@ public class SlidesPID {
         PEAK
     }
 
-    double goal = 0;
+    double targetPosition = 0;
 
-    public SlidesPID(double x, GoalPosition position) {
+    public SlidesPID(GoalPosition position) {
         hardware.init(hardware.hardwareMap);
-
-        this.currentPosition = x;
 
         switch (position) {
             case BOTTOM:
-                goal = 0;
+                targetPosition = 0;
                 break;
 
             case MIDDLE:
-                goal = 240;
+                targetPosition = 240;
                 break;
 
             case TOP:
-                goal = 530;
+                targetPosition = 530;
                 break;
 
             case PEAK:
-                goal = 600;
+                targetPosition = 600;
                 break;
         }
+
+        hardware.left_linear_slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardware.left_linear_slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        hardware.right_linear_slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardware.right_linear_slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void adjust() {
-        hardware.left_linear_slide.setPower(control(currentPosition, goal));
-        hardware.right_linear_slide.setPower(control(currentPosition, goal));
-        currentPosition += control(currentPosition, goal);
-
-        if (currentPosition == goal) {
-            reset();
-        }
+    public void setLiftMotorPower(double power) {
+        hardware.left_linear_slide.setPower(power);
+        hardware.right_linear_slide.setPower(power);
     }
 
-    public double getCurrentPosition() {
-        return currentPosition;
+    public List<Integer> getCurrentPosition(){
+        return Arrays.asList(hardware.left_linear_slide.getCurrentPosition(), hardware.right_linear_slide.getCurrentPosition());
     }
 
-    public double control(double x, double goal) {
-        double error = goal - x;
-        return error * kp;
+    public void control() {
+        double averagePosition = (getCurrentPosition().get(0) + getCurrentPosition().get(1)) / 2;
+        double p = kp * (targetPosition - averagePosition);
+        setLiftMotorPower(p);
     }
 
     public void reset() {
