@@ -27,6 +27,15 @@ public class Trajectories {
         POSE = moveForward.end();
     }
 
+    public static void moveBackward(double inches) {
+        Trajectory moveBackward = hardware.drivetrain.trajectoryBuilder(POSE)
+                .back(inches)
+                .build();
+
+        hardware.drivetrain.followTrajectory(moveBackward);
+        POSE = moveBackward.end();
+    }
+
     public static void strafeLeft(double inches) {
         Trajectory strafeLeft = hardware.drivetrain.trajectoryBuilder(POSE)
                 .strafeLeft(inches)
