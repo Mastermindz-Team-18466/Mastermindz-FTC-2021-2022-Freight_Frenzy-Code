@@ -14,15 +14,17 @@ public class Main extends LinearOpMode {
 
     SlidesPID slides;
     FieldOrientedDriveV2 driver;
-    Gamepad gamepad;
+    intake intake;
 
     @Override
     public void runOpMode() {
         driver = new FieldOrientedDriveV2();
-
+        
         waitForStart();
 
         while (opModeIsActive()) {
+            intake.intake(1);
+
             driver.move();
 
             slides.control();

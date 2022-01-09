@@ -14,9 +14,12 @@ public class Hardware {
     public DcMotor left_front_driver, right_front_driver, left_back_driver, right_back_driver;
     public BNO055IMU imu;
     public OpenCvInternalCamera webcam;
-    public Gamepad gamepad;
+    public Gamepad gamepad1;
+    public Gamepad gamepad2;
     public DcMotor left_linear_slide, right_linear_slide;
     public DcMotor left_encoder, right_encoder, middle_encoder;
+    public DcMotor intake_motor;
+    public double intakePower;
     Orientation angles;
 
     HardwareMap hardwareMap;
@@ -75,5 +78,7 @@ public class Hardware {
         //Middle Encoder
         middle_encoder = hardwareMap.get(DcMotor.class, "middle_encoder");
 
+        //Intake
+        intake_motor = hardwareMap.get(DcMotor.class, "intake_motor");
     }
 }
