@@ -2,21 +2,19 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 @TeleOp(name = "Concept: Main,", group = "Concept")
 //@Disabled
 public class Main extends LinearOpMode {
 
     SlidesPID slides;
-    FieldOrientedDriveV2 driver;
+    FieldOrientedDrive driver;
     Trajectories trajectories;
-    Gamepad gamepad;
     Intake intake;
 
     @Override
     public void runOpMode() {
-        driver = new FieldOrientedDriveV2(gamepad);
+        driver = new FieldOrientedDrive(gamepad1);
 
         waitForStart();
 

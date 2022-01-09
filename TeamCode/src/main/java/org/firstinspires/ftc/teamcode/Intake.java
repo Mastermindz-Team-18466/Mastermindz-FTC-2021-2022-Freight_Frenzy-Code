@@ -1,16 +1,22 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake {
-    Hardware hardware = new Hardware();
+    HardwareMap hardwareMap;
     Gamepad gamepad;
+    DcMotor intake_motor;
+    double intakePower;
 
     private int counter = 0;
 
     public Intake(Gamepad gamepad, double intakePower) {
-        hardware.init(hardware.hardwareMap);
-        this.hardware.intakePower = intakePower;
+        //Intake
+        intake_motor = hardwareMap.get(DcMotor.class, "intake_motor");
+
+        this.intakePower = intakePower;
         this.gamepad = gamepad;
     }
 
@@ -27,11 +33,11 @@ public class Intake {
     }
 
     public void start() {
-        hardware.intake_motor.setPower(hardware.intakePower);
+        intake_motor.setPower(intakePower);
     }
 
     public void finish() {
-        hardware.intake_motor.setPower(0);
+        intake_motor.setPower(0);
     }
 
 }
