@@ -12,6 +12,7 @@ public class Main extends LinearOpMode {
     FieldOrientedDriveV2 driver;
     Trajectories trajectories;
     Gamepad gamepad;
+    Intake intake;
 
     @Override
     public void runOpMode() {
@@ -20,6 +21,8 @@ public class Main extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            intake.intake(1);
+
             driver.move();
 
             slides.control();

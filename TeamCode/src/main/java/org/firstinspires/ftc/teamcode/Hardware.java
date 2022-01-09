@@ -19,6 +19,8 @@ public class Hardware {
     public DcMotor left_linear_slide, right_linear_slide;
     public DcMotor left_encoder, right_encoder, middle_encoder;
     public SampleMecanumDrive drivetrain;
+    public DcMotor intake_motor;
+    public double intakePower;
     Orientation angles;
 
     HardwareMap hardwareMap;
@@ -81,5 +83,7 @@ public class Hardware {
         //Middle Encoder
         middle_encoder = hardwareMap.get(DcMotor.class, "middle_encoder");
 
+        //Intake
+        intake_motor = hardwareMap.get(DcMotor.class, "intake_motor");
     }
 }
