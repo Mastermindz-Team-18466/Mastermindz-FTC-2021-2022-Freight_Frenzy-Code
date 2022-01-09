@@ -1,20 +1,26 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
+
 public class Intake {
     Hardware hardware = new Hardware();
+    Gamepad gamepad;
 
     private int counter = 0;
 
-    public void intake(double intakePower) {
+    public Intake(Gamepad gamepad, double intakePower) {
         hardware.init(hardware.hardwareMap);
         this.hardware.intakePower = intakePower;
+        this.gamepad = gamepad;
+    }
 
-        if (hardware.gamepad.right_bumper && counter == 0) {
+    public void control() {
+        if (gamepad.right_bumper && counter == 0) {
             start();
             counter = 1;
         }
 
-        if (hardware.gamepad.right_bumper && counter == 1) {
+        if (gamepad.right_bumper && counter == 1) {
             finish();
             counter = 0;
         }

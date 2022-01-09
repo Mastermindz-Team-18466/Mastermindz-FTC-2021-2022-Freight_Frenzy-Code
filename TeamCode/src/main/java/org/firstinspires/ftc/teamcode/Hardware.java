@@ -15,7 +15,6 @@ public class Hardware {
     public DcMotor left_front_driver, right_front_driver, left_back_driver, right_back_driver;
     public BNO055IMU imu;
     public OpenCvInternalCamera webcam;
-    public Gamepad gamepad;
     public DcMotor left_linear_slide, right_linear_slide;
     public DcMotor left_encoder, right_encoder, middle_encoder;
     public SampleMecanumDrive drivetrain;

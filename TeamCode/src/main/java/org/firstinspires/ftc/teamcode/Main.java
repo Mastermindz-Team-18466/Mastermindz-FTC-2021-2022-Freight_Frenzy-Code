@@ -16,12 +16,12 @@ public class Main extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        driver = new FieldOrientedDriveV2();
+        driver = new FieldOrientedDriveV2(gamepad);
 
         waitForStart();
 
         while (opModeIsActive()) {
-            intake.intake(1);
+            intake.control();
 
             driver.move();
 

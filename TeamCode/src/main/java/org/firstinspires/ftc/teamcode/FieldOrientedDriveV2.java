@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -18,10 +19,13 @@ public class FieldOrientedDriveV2 {
     BNO055IMU imu;
     Orientation angles;
 
+    Gamepad gamepad;
+
     double offset = 0;
 
-    public FieldOrientedDriveV2() {
+    public FieldOrientedDriveV2(Gamepad gamepad) {
         hardware.init(hardware.hardwareMap);
+        this.gamepad = gamepad;
     }
 
     public void move() {
@@ -29,15 +33,15 @@ public class FieldOrientedDriveV2 {
         hardware.angles = hardware.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
         //creates vector
         Vector vector = new Vector(15);
-        vector.setCartesian(hardware.gamepad.left_stick_x, hardware.gamepad.left_stick_y);
+        vector.setCartesian(gamepad.left_stick_x, gamepad.left_stick_y);
         vector.rotateDegrees(hardware.angles.firstAngle - offset);
 
 
-        if (hardware.gamepad.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
+        if (gamepad.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
             offset = hardware.angles.firstAngle;
         }
 
-        double rx = hardware.gamepad.right_stick_x;
+        double rx = gamepad.right_stick_x;
 
         double frontLeftPower = -vector.getY() + vector.getX() + rx;
         double backLeftPower = -vector.getY() - vector.getX() + rx;
