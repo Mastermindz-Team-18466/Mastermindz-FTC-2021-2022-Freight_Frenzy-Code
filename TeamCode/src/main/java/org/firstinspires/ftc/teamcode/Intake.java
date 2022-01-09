@@ -21,14 +21,11 @@ public class Intake {
     }
 
     public void control() {
-        if (gamepad.right_bumper && counter == 0) {
+        if (gamepad.right_bumper) {
             start();
-            counter = 1;
         }
-
-        if (gamepad.right_bumper && counter == 1) {
+        else {
             finish();
-            counter = 0;
         }
     }
 

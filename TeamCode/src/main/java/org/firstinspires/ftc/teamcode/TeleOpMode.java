@@ -15,6 +15,7 @@ public class TeleOpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
         driver = new FieldOrientedDrive(gamepad1);
+        intake = new Intake(gamepad1, 1);
 
         waitForStart();
 
