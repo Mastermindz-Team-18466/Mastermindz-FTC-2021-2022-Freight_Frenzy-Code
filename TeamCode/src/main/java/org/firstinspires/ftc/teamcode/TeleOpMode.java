@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "Concept: Main,", group = "Concept")
+@TeleOp(name = "Concept: Main", group = "Concept")
 //@Disabled
-public class Main extends LinearOpMode {
+public class TeleOpMode extends LinearOpMode {
 
     SlidesPID slides;
     FieldOrientedDrive driver;
