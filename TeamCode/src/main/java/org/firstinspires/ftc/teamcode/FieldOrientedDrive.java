@@ -72,7 +72,7 @@ public class FieldOrientedDrive extends LinearOpMode {
             vector.rotateDegrees(angles.firstAngle - offset);
 
 
-            if(gamepad1.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
+            if (gamepad1.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
                 offset = angles.firstAngle;
             }
 

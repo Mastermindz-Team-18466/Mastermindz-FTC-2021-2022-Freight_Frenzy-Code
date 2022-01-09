@@ -9,7 +9,8 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 public class BarcodeDetector extends OpenCvPipeline {
-    private Mat mat = new Mat();
+    private final Mat mat = new Mat();
+
     public enum BarcodePosition {
         ONE,
         TWO,

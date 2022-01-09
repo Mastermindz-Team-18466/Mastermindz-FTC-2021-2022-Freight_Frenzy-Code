@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +53,7 @@ public class SlidesPID {
         hardware.right_linear_slide.setPower(power);
     }
 
-    public List<Integer> getCurrentPosition(){
+    public List<Integer> getCurrentPosition() {
         return Arrays.asList(hardware.left_linear_slide.getCurrentPosition(), hardware.right_linear_slide.getCurrentPosition());
     }
 

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
@@ -17,13 +18,18 @@ public class Hardware {
     public Gamepad gamepad;
     public DcMotor left_linear_slide, right_linear_slide;
     public DcMotor left_encoder, right_encoder, middle_encoder;
+    public SampleMecanumDrive drivetrain;
     Orientation angles;
 
     HardwareMap hardwareMap;
 
-    public Hardware(){}
+    public Hardware() {
+    }
 
     public void init(HardwareMap hardwareMap) {
+        //Drivetrain
+        drivetrain = new SampleMecanumDrive(hardwareMap);
+
         //Left Front Driver
         left_front_driver = hardwareMap.get(DcMotor.class, "leftFront_driver");
         left_front_driver.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

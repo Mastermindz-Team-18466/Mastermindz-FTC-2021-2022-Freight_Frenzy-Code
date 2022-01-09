@@ -1,11 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -38,7 +33,7 @@ public class FieldOrientedDriveV2 {
         vector.rotateDegrees(hardware.angles.firstAngle - offset);
 
 
-        if(hardware.gamepad.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
+        if (hardware.gamepad.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
             offset = hardware.angles.firstAngle;
         }
 

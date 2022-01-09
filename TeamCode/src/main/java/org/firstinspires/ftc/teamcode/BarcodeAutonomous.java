@@ -23,8 +23,7 @@ public class BarcodeAutonomous extends LinearOpMode {
         hardware.webcam.setPipeline(detector);
         hardware.webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
 
-        while (opModeIsActive())
-        {
+        while (opModeIsActive()) {
             switch (detector.position) {
                 case ONE:
                     break;
