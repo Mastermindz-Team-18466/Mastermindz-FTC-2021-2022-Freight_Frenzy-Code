@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import androidx.annotation.RequiresPermission;
-
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
@@ -21,7 +17,7 @@ public class Calibration extends LinearOpMode {
 
     static final double calibrationSpeed = 0.5;
     static final double TICKS_PER_REV = 8192;
-    static final double WHEEL_DIAMETER = 100/25.4;
+    static final double WHEEL_DIAMETER = 100 / 25.4;
     static final double GEAR_RATIO = 1;
 
     static final double TICKS_PER_INCH = WHEEL_DIAMETER * Math.PI * GEAR_RATIO / TICKS_PER_REV;
@@ -38,7 +34,7 @@ public class Calibration extends LinearOpMode {
 
         waitForStart();
 
-        while(hardware.imu.getAngularOrientation().firstAngle < 90 && opModeIsActive()) {
+        while (hardware.imu.getAngularOrientation().firstAngle < 90 && opModeIsActive()) {
             hardware.right_front_driver.setPower(-calibrationSpeed);
             hardware.right_back_driver.setPower(-calibrationSpeed);
             hardware.left_front_driver.setPower(calibrationSpeed);

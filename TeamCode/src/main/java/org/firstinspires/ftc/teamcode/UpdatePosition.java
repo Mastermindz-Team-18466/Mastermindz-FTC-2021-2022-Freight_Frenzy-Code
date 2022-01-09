@@ -4,7 +4,6 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -15,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class UpdatePosition extends LinearOpMode {
     Hardware hardware = new Hardware();
     static final double TICKS_PER_REV = 8192;
-    static final double WHEEL_DIAMETER = 100/25.4;
+    static final double WHEEL_DIAMETER = 100 / 25.4;
     static final double GEAR_RATIO = 1;
 
     static final double TICKS_PER_INCH = WHEEL_DIAMETER * Math.PI * GEAR_RATIO / TICKS_PER_REV;
@@ -46,7 +45,7 @@ public class UpdatePosition extends LinearOpMode {
             vector.rotateDegrees(angles.firstAngle - offset);
 
 
-            if(gamepad1.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
+            if (gamepad1.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
                 offset = angles.firstAngle;
             }
 

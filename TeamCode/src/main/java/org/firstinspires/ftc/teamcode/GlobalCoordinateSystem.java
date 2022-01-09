@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.media.midi.MidiDevice;
-
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;

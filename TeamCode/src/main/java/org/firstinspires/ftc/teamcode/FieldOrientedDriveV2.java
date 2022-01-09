@@ -29,15 +29,15 @@ public class FieldOrientedDriveV2 {
         hardware.angles = hardware.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
         //creates vector
         Vector vector = new Vector(15);
-        vector.setCartesian(hardware.gamepad1.left_stick_x, hardware.gamepad1.left_stick_y);
+        vector.setCartesian(hardware.gamepad.left_stick_x, hardware.gamepad.left_stick_y);
         vector.rotateDegrees(hardware.angles.firstAngle - offset);
 
 
-        if(hardware.gamepad1.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
+        if (hardware.gamepad.a) { // set the offset to the current angle when a is pressed (or any button you want) to make the current angle 0
             offset = hardware.angles.firstAngle;
         }
 
-        double rx = hardware.gamepad1.right_stick_x;
+        double rx = hardware.gamepad.right_stick_x;
 
         double frontLeftPower = -vector.getY() + vector.getX() + rx;
         double backLeftPower = -vector.getY() - vector.getX() + rx;
