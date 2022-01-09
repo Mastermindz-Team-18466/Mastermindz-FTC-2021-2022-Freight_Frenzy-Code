@@ -11,11 +11,13 @@ public class TeleOpMode extends LinearOpMode {
     FieldOrientedDrive driver;
     Trajectories trajectories;
     Intake intake;
+    CarouselMechanism carouselMechanism;
 
     @Override
     public void runOpMode() {
         driver = new FieldOrientedDrive(gamepad1);
         intake = new Intake(gamepad1, 1);
+        carouselMechanism = new CarouselMechanism(gamepad1);
 
         waitForStart();
 
@@ -25,6 +27,8 @@ public class TeleOpMode extends LinearOpMode {
             driver.move();
 
             slides.control();
+
+            carouselMechanism.control();
 
             Trajectories.Action[] actions = new Trajectories.Action[]{
                     () -> Trajectories.moveForward(100),

@@ -10,7 +10,6 @@ public class Intake {
     DcMotor intake_motor;
     double intakePower;
 
-    private int counter = 0;
 
     public Intake(Gamepad gamepad, double intakePower) {
         //Intake
@@ -25,7 +24,7 @@ public class Intake {
             start();
         }
         else {
-            finish();
+            stop();
         }
     }
 
@@ -33,7 +32,7 @@ public class Intake {
         intake_motor.setPower(intakePower);
     }
 
-    public void finish() {
+    public void stop() {
         intake_motor.setPower(0);
     }
 
