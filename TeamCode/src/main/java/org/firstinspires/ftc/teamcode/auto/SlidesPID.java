@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Config
-public class Slides {
+public class SlidesPID {
     HardwareMap hardwareMap;
 
     DcMotor left_linear_slide, right_linear_slide;
@@ -25,7 +25,7 @@ public class Slides {
 
     double targetPosition = 0;
 
-    public Slides(GoalPosition position) {
+    public SlidesPID(GoalPosition position) {
         left_linear_slide = hardwareMap.get(DcMotor.class, "leftLinear_slide");
         left_linear_slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_linear_slide.setDirection(DcMotorSimple.Direction.FORWARD);
