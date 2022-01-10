@@ -31,6 +31,15 @@ public class Trajectories {
         POSE = moveForward.end();
     }
 
+    public static void moveBackward(double inches) {
+        Trajectory moveBackward = drivetrain.trajectoryBuilder(POSE)
+                .back(inches)
+                .build();
+
+        drivetrain.followTrajectory(moveBackward);
+        POSE = moveBackward.end();
+    }
+
     public static void strafeLeft(double inches) {
         Trajectory strafeLeft = drivetrain.trajectoryBuilder(POSE)
                 .strafeLeft(inches)
