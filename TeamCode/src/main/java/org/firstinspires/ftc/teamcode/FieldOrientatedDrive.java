@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-public class FieldOrientedDrive {
+public class FieldOrientatedDrive {
     //The Stuff(variables)
     ElapsedTime runtime = new ElapsedTime();
     Vector vector;
@@ -28,7 +28,7 @@ public class FieldOrientedDrive {
 
     double offset = 0;
 
-    public FieldOrientedDrive(Gamepad gamepad) {
+    public FieldOrientatedDrive(Gamepad gamepad) {
         //Left Front Driver
         left_front_driver = hardwareMap.get(DcMotor.class, "leftFront_driver");
         left_front_driver.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

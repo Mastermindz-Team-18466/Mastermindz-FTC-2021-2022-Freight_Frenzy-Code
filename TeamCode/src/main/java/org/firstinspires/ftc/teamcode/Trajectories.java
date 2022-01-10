@@ -32,11 +32,11 @@ public class Trajectories {
     }
 
     public static void moveBackward(double inches) {
-        Trajectory moveBackward = hardware.drivetrain.trajectoryBuilder(POSE)
+        Trajectory moveBackward = drivetrain.trajectoryBuilder(POSE)
                 .back(inches)
                 .build();
 
-        hardware.drivetrain.followTrajectory(moveBackward);
+        drivetrain.followTrajectory(moveBackward);
         POSE = moveBackward.end();
     }
 

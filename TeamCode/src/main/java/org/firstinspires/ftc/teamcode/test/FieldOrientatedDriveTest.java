@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,8 +11,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.Vector;
 
-@TeleOp(name = "Concept: FieldCentricMecanumTeleOp", group = "Test")
+@TeleOp (name = "Concept: FieldOrientatedDrive", group = "Test")
 //@Disabled
 public class FieldOrientatedDriveTest extends LinearOpMode {
     //The Stuff(variables)

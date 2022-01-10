@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Config
-public class SlidesPID {
+public class Slides {
     HardwareMap hardwareMap;
 
     DcMotor left_linear_slide, right_linear_slide;
@@ -25,7 +25,7 @@ public class SlidesPID {
 
     double targetPosition = 0;
 
-    public SlidesPID(GoalPosition position) {
+    public Slides(GoalPosition position) {
         left_linear_slide = hardwareMap.get(DcMotor.class, "leftLinear_slide");
         left_linear_slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_linear_slide.setDirection(DcMotorSimple.Direction.FORWARD);
