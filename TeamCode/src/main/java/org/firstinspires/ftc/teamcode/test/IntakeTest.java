@@ -4,11 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp (name = "Intake", group = "Test")
+@TeleOp (name = "IntakeTest", group = "Test")
 
 public class IntakeTest extends LinearOpMode {
     DcMotor intake_motor;
-    double intakePower = 1;
+    double intakePower = 0.5;
 
     @Override
     public void runOpMode() throws InterruptedException {
