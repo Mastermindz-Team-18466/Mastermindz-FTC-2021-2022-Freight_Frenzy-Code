@@ -11,8 +11,8 @@ import java.util.List;
 @TeleOp (name = "Slides", group = "Test")
 public class SlidesTest extends LinearOpMode {
     DcMotor left_linear_slide, right_linear_slide;
-    public static double kp = 0.007;
-    double targetPosition = 530;
+    public static double kp = 0.0035;
+    double targetPosition = 500;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -33,14 +33,42 @@ public class SlidesTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            double averagePosition = (getCurrentPosition().get(0) + getCurrentPosition().get(1)) / 2;
-            double p = kp * (targetPosition - averagePosition);
-            left_linear_slide.setPower(p);
-            right_linear_slide.setPower(p);
+            if (gamepad1.dpad_down) {
+                targetPosition = 0;
+                move(0);
+            } else if (gamepad1.dpad_left) {
+                targetPosition = -10;
+                move(-10);
+            } else if (gamepad1.dpad_right) {
+                targetPosition = 530;
+                move(530);
+            } else if (gamepad1.dpad_up) {
+                targetPosition = 600;
+                move(600);
+            }
         }
+    }
+
+    public void setLiftMotorPower(double power) {
+        left_linear_slide.setPower(power);
+        right_linear_slide.setPower(-power);
+
+        
+        move(targetPosition);
     }
 
     public List<Integer> getCurrentPosition() {
         return Arrays.asList(left_linear_slide.getCurrentPosition(), right_linear_slide.getCurrentPosition());
+    }
+
+    public void move(double targetPosition) {
+        double averagePosition = (getCurrentPosition().get(0) + (getCurrentPosition().get(1) * -1)) / 2 / 19.5;
+        double p = kp * (targetPosition - averagePosition);
+
+        telemetry.addData("Position", averagePosition);
+        telemetry.update();
+
+        left_linear_slide.setPower(p);
+        right_linear_slide.setPower(-p);
     }
 }

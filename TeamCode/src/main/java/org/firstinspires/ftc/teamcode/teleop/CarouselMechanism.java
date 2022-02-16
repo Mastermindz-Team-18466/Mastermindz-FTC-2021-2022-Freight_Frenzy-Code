@@ -22,7 +22,7 @@ public class CarouselMechanism {
         if (gamepad.x) {
             start();
         }
-        else {
+        else if (false) {
             stop();
         }
     }

@@ -17,12 +17,7 @@ public class BarcodeDetector extends OpenCvPipeline {
         THREE
     }
 
-    public volatile BarcodePosition position = BarcodePosition.THREE;
-    Telemetry telemetry;
-
-    public BarcodeDetector(Telemetry telemetry) {
-        this.telemetry = telemetry;
-    }
+    public BarcodePosition position = BarcodePosition.THREE;
 
     @Override
     public Mat processFrame(Mat input) {
@@ -59,12 +54,6 @@ public class BarcodeDetector extends OpenCvPipeline {
                 position = BarcodePosition.THREE;
             }
         }
-
-        telemetry.addData("[Position]", position);
-        telemetry.addData("[Left]", leftTotal);
-        telemetry.addData("[Center]", centerTotal);
-        telemetry.addData("[Right]", rightTotal);
-        telemetry.update();
 
         return mat;
     }
