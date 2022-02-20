@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-@TeleOp (name = "Concept: CarouselMechanism", group = "Test")
+
 public class CarouselMechanismTest extends LinearOpMode {
     CRServo carouselServo1;
     CRServo carouselServo2;

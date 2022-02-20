@@ -11,7 +11,7 @@ import java.util.List;
 @TeleOp (name = "Slides", group = "Test")
 public class SlidesTest extends LinearOpMode {
     DcMotor left_linear_slide, right_linear_slide;
-    public static double kp = 0.0035;
+    public static double kp = 0.04;
     double targetPosition = 500;
 
     @Override
@@ -37,8 +37,8 @@ public class SlidesTest extends LinearOpMode {
                 targetPosition = 0;
                 move(0);
             } else if (gamepad1.dpad_left) {
-                targetPosition = -10;
-                move(-10);
+                targetPosition = -90;
+                move(-90);
             } else if (gamepad1.dpad_right) {
                 targetPosition = 530;
                 move(530);
@@ -70,5 +70,9 @@ public class SlidesTest extends LinearOpMode {
 
         left_linear_slide.setPower(p);
         right_linear_slide.setPower(-p);
+
+        if (averagePosition + 5 < targetPosition) {
+            move(targetPosition);
+        }
     }
 }
