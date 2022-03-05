@@ -13,7 +13,7 @@ import java.util.List;
 public class IntakeSequence extends LinearOpMode {
     Servo rightV4B, leftV4B, claw;
     DcMotor left_linear_slide, right_linear_slide, intake_motor;
-    public static double kp = 0.04;
+    public static double kp = 0.01;
     double targetPosition = 500;
     double intakePower = 1;
     int count = 0;
