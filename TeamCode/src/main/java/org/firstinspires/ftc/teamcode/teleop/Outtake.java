@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Outtake {
@@ -27,22 +28,36 @@ public class Outtake {
     private static Direction outtakeDirection;
     public Position currentPosition = Position.START;
 
-    // Hardware
-    private final HardwareMap hw;
-
     // Time
     public static int MS_between_presses = 250;
     private long startTime = System.currentTimeMillis();
     private long previousClick = System.currentTimeMillis();
     public long currentTime = 0;
 
+    //Gamepad
+    public Gamepad gamepad;
+
     // Constructor
-    public Outtake(HardwareMap hw, SlidesTeleOp lift, V4B v4b, Claw claw) {
-        this.hw = hw;
+    public Outtake(SlidesTeleOp lift, V4B v4b, Claw claw, Gamepad gamepad) {
         this.lift = lift;
         this.v4b = v4b;
         this.claw = claw;
+        this.gamepad = gamepad;
 
+    }
+
+    public void control() {
+        if (gamepad.b) {
+            set(Position.BACK);
+        }
+
+        if (gamepad.dpad_up) {
+            set(Position.TOP_FORWARD);
+        }
+
+        if (gamepad.dpad_down) {
+            set(Position.BOTTOM_FORWARD);
+        }
     }
 
 

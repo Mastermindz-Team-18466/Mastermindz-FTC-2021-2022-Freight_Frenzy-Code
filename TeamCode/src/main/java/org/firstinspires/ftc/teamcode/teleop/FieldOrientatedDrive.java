@@ -31,22 +31,22 @@ public class FieldOrientatedDrive {
 
     public FieldOrientatedDrive(Gamepad gamepad) {
         //Left Front Driver
-        left_front_driver = hardwareMap.get(DcMotor.class, "leftFront_driver");
+        left_front_driver = hardwareMap.get(DcMotor.class, "leftFront");
         left_front_driver.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_front_driver.setDirection(DcMotorSimple.Direction.FORWARD);
 
         //Right Front Driver
-        right_front_driver = hardwareMap.get(DcMotor.class, "rightFront_driver");
+        right_front_driver = hardwareMap.get(DcMotor.class, "rightFront");
         right_front_driver.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_front_driver.setDirection(DcMotorSimple.Direction.FORWARD);
 
         //Left Back Driver
-        left_back_driver = hardwareMap.get(DcMotor.class, "leftBack_driver");
+        left_back_driver = hardwareMap.get(DcMotor.class, "leftRear");
         left_back_driver.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_back_driver.setDirection(DcMotorSimple.Direction.FORWARD);
 
         //Right Back Driver
-        right_back_driver = hardwareMap.get(DcMotor.class, "rightBack_driver");
+        right_back_driver = hardwareMap.get(DcMotor.class, "rightRear");
         right_back_driver.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_back_driver.setDirection(DcMotorSimple.Direction.FORWARD);
 

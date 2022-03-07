@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.auto.SlidesPID;
 import org.firstinspires.ftc.teamcode.auto.Trajectories;
 
+import java.util.function.DoubleToIntFunction;
+
 @TeleOp (name = "TeleOp", group = "Concept")
 //@Disabled
 public class TeleOpMode extends LinearOpMode {
@@ -15,24 +17,21 @@ public class TeleOpMode extends LinearOpMode {
     Intake intake;
     CarouselMechanism carouselMechanism;
     SlidesTeleOp slides;
+    Outtake outtake;
 
     @Override
     public void runOpMode() {
-        driver = new FieldOrientatedDrive(gamepad1);
-        intake = new Intake(gamepad1, 1);
-        carouselMechanism = new CarouselMechanism(gamepad1);
-        slides = new SlidesTeleOp(gamepad1);
+        // intake = new Intake(gamepad1, 1);
+        // carouselMechanism = new CarouselMechanism(gamepad1);
+        slides = new SlidesTeleOp(gamepad1, hardwareMap);
+        outtake = new Outtake(slides, new V4B(gamepad1), new Claw(gamepad1), gamepad1);
+
 
         waitForStart();
 
+
         while (opModeIsActive()) {
-            intake.control();
-
-            slides.control();
-
-            driver.move();
-
-            carouselMechanism.control();
+            outtake.control();
 
             /*
             Trajectories.Action[] actions = new Trajectories.Action[]{
@@ -46,10 +45,6 @@ public class TeleOpMode extends LinearOpMode {
             }
             */
 
-
-            telemetry.addData("Vector X", driver.vector.getX());
-            telemetry.addData("Vector Y", driver.vector.getY());
-            telemetry.addData("Vector Direction", driver.vector.getDir());
             telemetry.update();
 
             driver.finish();
