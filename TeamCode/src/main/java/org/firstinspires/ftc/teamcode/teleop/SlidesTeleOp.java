@@ -9,8 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SlidesTeleOp {
-    HardwareMap hardwareMap;
-
     DcMotor left_linear_slide, right_linear_slide;
     Gamepad gamepad;
     public static double kp = 0.007;
@@ -24,7 +22,7 @@ public class SlidesTeleOp {
         TSE
     }
 
-    public SlidesTeleOp(Gamepad gamepad) {
+    public SlidesTeleOp(Gamepad gamepad, HardwareMap hardwareMap) {
         left_linear_slide = hardwareMap.get(DcMotor.class, "leftLinear_slide");
         left_linear_slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_linear_slide.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -48,6 +46,8 @@ public class SlidesTeleOp {
     public void setLiftMotorPower(double power) {
         left_linear_slide.setPower(power);
         right_linear_slide.setPower(power);
+
+        move(getPosition());
     }
 
     public List<Integer> getCurrentPosition() {
@@ -55,9 +55,12 @@ public class SlidesTeleOp {
     }
 
     public void move(double targetPosition) {
-        double averagePosition = (getCurrentPosition().get(0) + getCurrentPosition().get(1)) / 2;
+        double averagePosition = getPosition();
         double p = kp * (targetPosition - averagePosition);
-        setLiftMotorPower(p);
+
+        if (Math.ceil(averagePosition) + 5 < 90) {
+            setLiftMotorPower(p);
+        }
     }
 
     public int getPosition() {

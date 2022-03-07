@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class V4B {
-    HardwareMap hardwareMap;
-
     Servo rightV4B, leftV4B;
     Gamepad gamepad;
 
