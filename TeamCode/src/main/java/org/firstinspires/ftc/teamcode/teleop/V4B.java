@@ -16,7 +16,7 @@ public class V4B {
         SHARED
     }
 
-    public V4B(Gamepad gamepad) {
+    public V4B(Gamepad gamepad, HardwareMap hardwareMap) {
         rightV4B = hardwareMap.get(Servo.class, "rightV4B");
         leftV4B = hardwareMap.get(Servo.class, "leftV4B");
 

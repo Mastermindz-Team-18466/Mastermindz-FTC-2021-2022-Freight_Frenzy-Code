@@ -24,14 +24,20 @@ public class TeleOpMode extends LinearOpMode {
         // intake = new Intake(gamepad1, 1);
         // carouselMechanism = new CarouselMechanism(gamepad1);
         slides = new SlidesTeleOp(gamepad1, hardwareMap);
-        outtake = new Outtake(slides, new V4B(gamepad1), new Claw(gamepad1), gamepad1);
+        outtake = new Outtake(slides, new V4B(gamepad1, hardwareMap), new Claw(gamepad1, hardwareMap), gamepad1);
 
 
         waitForStart();
 
 
         while (opModeIsActive()) {
-            outtake.control();
+            if (gamepad1.b) {
+                outtake.control(Outtake.Position.BACK);
+            } else if (gamepad1.dpad_down) {
+                outtake.control(Outtake.Position.BOTTOM_FORWARD);
+            } else if (gamepad1.dpad_up) {
+                outtake.control(Outtake.Position.TOP_FORWARD);
+            }
 
             /*
             Trajectories.Action[] actions = new Trajectories.Action[]{
@@ -46,8 +52,6 @@ public class TeleOpMode extends LinearOpMode {
             */
 
             telemetry.update();
-
-            driver.finish();
         }
 
         telemetry.addData(">", "Done");

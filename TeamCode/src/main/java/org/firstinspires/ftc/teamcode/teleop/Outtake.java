@@ -46,18 +46,8 @@ public class Outtake {
 
     }
 
-    public void control() {
-        if (gamepad.b) {
-            set(Position.BACK);
-        }
-
-        if (gamepad.dpad_up) {
-            set(Position.TOP_FORWARD);
-        }
-
-        if (gamepad.dpad_down) {
-            set(Position.BOTTOM_FORWARD);
-        }
+    public void control(Position position) {
+        set(position);
     }
 
 
@@ -81,13 +71,13 @@ public class Outtake {
 
                 //God mode
                 v4b.control(V4B.State.CLOSE);
-                lift.control(SlidesTeleOp.State.BOTTOM);
+                // lift.control(SlidesTeleOp.State.BOTTOM);
 
                 //Time reset
                 startTime = System.currentTimeMillis();
                 currentTime = System.currentTimeMillis();
 
-                while (currentTime - startTime < 500) {
+                while (currentTime - startTime < 5000) {
                     // Refresh currentTime until wait reached
                     currentTime = System.currentTimeMillis();
                 }
@@ -103,14 +93,14 @@ public class Outtake {
                 //Close claw
                 claw.control(Claw.State.CLOSE);
 
-                while (currentTime - startTime < 250) {
+                while (currentTime - startTime < 2500) {
                     // Refresh currentTime until wait reached
                     currentTime = System.currentTimeMillis();
                 }
 
                 //God mode
                 v4b.control(V4B.State.OPEN);
-                lift.control(SlidesTeleOp.State.BOTTOM);
+                // lift.control(SlidesTeleOp.State.BOTTOM);
 
                 //Time reset
                 startTime = System.currentTimeMillis();
@@ -168,7 +158,7 @@ public class Outtake {
 
                 //God mode
                 v4b.control(V4B.State.OPEN);
-                lift.control(SlidesTeleOp.State.UP);
+                // lift.control(SlidesTeleOp.State.UP);
 
                 //Time reset
                 startTime = System.currentTimeMillis();

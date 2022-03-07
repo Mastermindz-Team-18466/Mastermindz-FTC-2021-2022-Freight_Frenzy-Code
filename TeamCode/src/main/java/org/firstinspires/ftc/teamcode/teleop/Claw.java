@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Claw {
-    HardwareMap hardwareMap;
     Servo claw;
     Gamepad gamepad;
 
@@ -14,7 +13,7 @@ public class Claw {
         CLOSE
     }
 
-    public Claw(Gamepad gamepad) {
+    public Claw(Gamepad gamepad, HardwareMap hardwareMap) {
         this.gamepad = gamepad;
 
         claw = hardwareMap.get(Servo.class, "claw");

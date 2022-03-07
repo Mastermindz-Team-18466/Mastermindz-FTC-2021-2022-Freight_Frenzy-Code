@@ -47,7 +47,7 @@ public class SlidesTeleOp {
         left_linear_slide.setPower(power);
         right_linear_slide.setPower(power);
 
-        move(getPosition());
+        // move(getPosition());
     }
 
     public List<Integer> getCurrentPosition() {
@@ -58,9 +58,11 @@ public class SlidesTeleOp {
         double averagePosition = getPosition();
         double p = kp * (targetPosition - averagePosition);
 
-        if (Math.ceil(averagePosition) + 5 < 90) {
-            setLiftMotorPower(p);
-        }
+        // if (Math.floor(averagePosition) - 5 > -90) {
+            //setLiftMotorPower(p);
+        // }
+
+        setLiftMotorPower(p);
     }
 
     public int getPosition() {
