@@ -9,19 +9,24 @@ public class Claw {
     Servo claw;
     Gamepad gamepad;
 
+    public enum State {
+        OPEN,
+        CLOSE
+    }
+
     public Claw(Gamepad gamepad) {
         this.gamepad = gamepad;
 
         claw = hardwareMap.get(Servo.class, "claw");
     }
 
-    public void control() {
-        if (gamepad.x) {
+    public void control(State state) {
+        if (state == State.OPEN) {
             claw.setDirection(Servo.Direction.FORWARD);
-            claw.setPosition(1);
-        } if (gamepad.b) {
+            claw.setPosition(0.7);
+        } if (state == State.CLOSE) {
             claw.setDirection(Servo.Direction.REVERSE);
-            claw.setPosition(0.2);
+            claw.setPosition(0.5);
         }
     }
 }
