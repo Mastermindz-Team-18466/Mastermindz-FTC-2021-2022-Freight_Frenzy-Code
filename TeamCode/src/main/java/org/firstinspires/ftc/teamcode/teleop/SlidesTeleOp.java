@@ -15,6 +15,15 @@ public class SlidesTeleOp {
     Gamepad gamepad;
     public static double kp = 0.007;
 
+    public enum State {
+        BOTTOM,
+        MID,
+        UP,
+        SHARED,
+        PEAK,
+        TSE
+    }
+
     public SlidesTeleOp(Gamepad gamepad) {
         left_linear_slide = hardwareMap.get(DcMotor.class, "leftLinear_slide");
         left_linear_slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -28,15 +37,11 @@ public class SlidesTeleOp {
         this.gamepad = gamepad;
     }
 
-    public void control() {
-        if (gamepad.dpad_down) {
+    public void control(State state) {
+        if (state == State.BOTTOM) {
             move(0);
-        } else if (gamepad.dpad_left) {
-            move(240);
-        } else if (gamepad.dpad_right) {
-            move(530);
-        } else if (gamepad.dpad_up) {
-            move(600);
+        } else if (state == State.UP) {
+            move(-90);
         }
     }
 
@@ -53,5 +58,9 @@ public class SlidesTeleOp {
         double averagePosition = (getCurrentPosition().get(0) + getCurrentPosition().get(1)) / 2;
         double p = kp * (targetPosition - averagePosition);
         setLiftMotorPower(p);
+    }
+
+    public int getPosition() {
+        return (getCurrentPosition().get(0) + getCurrentPosition().get(1)) / 2;
     }
 }
