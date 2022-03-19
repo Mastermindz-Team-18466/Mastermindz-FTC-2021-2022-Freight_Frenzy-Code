@@ -24,7 +24,6 @@ public class Claw {
             claw.setDirection(Servo.Direction.FORWARD);
             claw.setPosition(0.7);
         } if (state == State.CLOSE) {
-            claw.setDirection(Servo.Direction.REVERSE);
             claw.setPosition(0.5);
         }
     }

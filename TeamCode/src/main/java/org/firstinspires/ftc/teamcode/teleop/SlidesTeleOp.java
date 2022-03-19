@@ -11,7 +11,7 @@ import java.util.List;
 public class SlidesTeleOp {
     DcMotor left_linear_slide, right_linear_slide;
     Gamepad gamepad;
-    public static double kp = 0.007;
+    public static double kp = 0.1;
 
     public enum State {
         BOTTOM,
@@ -21,6 +21,8 @@ public class SlidesTeleOp {
         PEAK,
         TSE
     }
+
+    int targetPosition = 0;
 
     public SlidesTeleOp(Gamepad gamepad, HardwareMap hardwareMap) {
         left_linear_slide = hardwareMap.get(DcMotor.class, "leftLinear_slide");
@@ -37,35 +39,37 @@ public class SlidesTeleOp {
 
     public void control(State state) {
         if (state == State.BOTTOM) {
+            targetPosition = 0;
             move(0);
         } else if (state == State.UP) {
-            move(-90);
+            targetPosition = -70;
+            move(-70);
         }
     }
 
     public void setLiftMotorPower(double power) {
         left_linear_slide.setPower(power);
-        right_linear_slide.setPower(power);
+        right_linear_slide.setPower(-power);
+    }
 
-        // move(getPosition());
+    public void stop() {
+        left_linear_slide.setPower(0);
+        right_linear_slide.setPower(0);
     }
 
     public List<Integer> getCurrentPosition() {
         return Arrays.asList(left_linear_slide.getCurrentPosition(), right_linear_slide.getCurrentPosition());
     }
 
-    public void move(double targetPosition) {
+    public void move(double position) {
         double averagePosition = getPosition();
         double p = kp * (targetPosition - averagePosition);
 
-        // if (Math.floor(averagePosition) - 5 > -90) {
-            //setLiftMotorPower(p);
-        // }
-
+        System.out.println(averagePosition);
         setLiftMotorPower(p);
     }
 
-    public int getPosition() {
-        return (getCurrentPosition().get(0) + getCurrentPosition().get(1)) / 2;
+    public double getPosition() {
+        return (getCurrentPosition().get(0) + (getCurrentPosition().get(1) * -1)) / 2 / 19.5;
     }
 }
