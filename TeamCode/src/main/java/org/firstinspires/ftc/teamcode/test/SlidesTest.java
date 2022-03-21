@@ -70,9 +70,5 @@ public class SlidesTest extends LinearOpMode {
 
         left_linear_slide.setPower(p);
         right_linear_slide.setPower(-p);
-
-        if (averagePosition + 5 < targetPosition) {
-            move(targetPosition);
-        }
     }
 }

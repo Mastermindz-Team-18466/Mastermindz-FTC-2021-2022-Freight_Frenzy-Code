@@ -16,7 +16,7 @@ public class V4B {
         SHARED
     }
 
-    public V4B(Gamepad gamepad) {
+    public V4B(Gamepad gamepad, HardwareMap hardwareMap) {
         rightV4B = hardwareMap.get(Servo.class, "rightV4B");
         leftV4B = hardwareMap.get(Servo.class, "leftV4B");
 
@@ -27,14 +27,14 @@ public class V4B {
         if (state == State.CLOSE) {
             rightV4B.setDirection(Servo.Direction.FORWARD);
             leftV4B.setDirection(Servo.Direction.REVERSE);
-            rightV4B.setPosition(0);
-            leftV4B.setPosition(0);
+            rightV4B.setPosition(0.05);
+            leftV4B.setPosition(0.05);
         } else if (state == State.SHARED) {
             rightV4B.setDirection(Servo.Direction.FORWARD);
             leftV4B.setDirection(Servo.Direction.REVERSE);
             rightV4B.setPosition(1);
             leftV4B.setPosition(1);
-        } else {
+        } else if (state == State.OPEN) {
             rightV4B.setDirection(Servo.Direction.FORWARD);
             leftV4B.setDirection(Servo.Direction.REVERSE);
             rightV4B.setPosition(0.7);

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Outtake {
     // Components
@@ -46,170 +45,92 @@ public class Outtake {
 
     }
 
-    public void control() {
-        if (gamepad.b) {
-            set(Position.BACK);
-        }
-
-        if (gamepad.dpad_up) {
-            set(Position.TOP_FORWARD);
-        }
-
-        if (gamepad.dpad_down) {
-            set(Position.BOTTOM_FORWARD);
-        }
-    }
-
-
     public void set(Position position) {
         currentPosition = position;
         startTime = System.currentTimeMillis();
 
-        switch (position) {
-            case BACK:
-                //Time
-                startTime = System.currentTimeMillis();
+        if (position == Position.BACK) {
+            //Time
+            startTime = System.currentTimeMillis();
+            currentTime = System.currentTimeMillis();
+
+            //Close claw
+            claw.control(Claw.State.CLOSE);
+
+            while (claw.claw.getPosition() != 0.5) {
+                // Refresh currentTime until wait reached
                 currentTime = System.currentTimeMillis();
+            }
 
-                while (currentTime - startTime < 250) {
-                    // Refresh currentTime until wait reached
-                    currentTime = System.currentTimeMillis();
-                }
-
-                //Close claw
-                claw.control(Claw.State.CLOSE);
-
-                //God mode
-                v4b.control(V4B.State.CLOSE);
+            //God mode
+            v4b.control(V4B.State.CLOSE);
+            while (Math.ceil(lift.getPosition()) < 0) {
                 lift.control(SlidesTeleOp.State.BOTTOM);
+            }
 
-                //Time reset
-                startTime = System.currentTimeMillis();
+            lift.stop();
+
+            //Time reset
+            startTime = System.currentTimeMillis();
+            currentTime = System.currentTimeMillis();
+
+            while (currentTime - startTime < 1000) {
+                // Refresh currentTime until wait reached
                 currentTime = System.currentTimeMillis();
+            }
 
-                while (currentTime - startTime < 500) {
-                    // Refresh currentTime until wait reached
-                    currentTime = System.currentTimeMillis();
-                }
+            //Open claw
+            claw.control(Claw.State.OPEN);
+        } else if (position == Position.BOTTOM_FORWARD) {
+            //Time
+            startTime = System.currentTimeMillis();
+            currentTime = System.currentTimeMillis();
 
-                //Open claw
-                claw.control(Claw.State.OPEN);
+            //Close claw
+            claw.control(Claw.State.CLOSE);
 
-            case BOTTOM_FORWARD:
-                //Time
-                startTime = System.currentTimeMillis();
+            while (claw.claw.getPosition() != 0.5) {
+                // Refresh currentTime until wait reached
                 currentTime = System.currentTimeMillis();
+            }
 
-                //Close claw
-                claw.control(Claw.State.CLOSE);
+            while (currentTime - startTime < 250) {
+                // Refresh currentTime until wait reached
+                currentTime = System.currentTimeMillis();
+            }
 
-                while (currentTime - startTime < 250) {
-                    // Refresh currentTime until wait reached
-                    currentTime = System.currentTimeMillis();
-                }
-
-                //God mode
-                v4b.control(V4B.State.OPEN);
+            //God mode
+            v4b.control(V4B.State.OPEN);
+            while (Math.ceil(lift.getPosition()) < 0) {
                 lift.control(SlidesTeleOp.State.BOTTOM);
+            }
 
-                //Time reset
-                startTime = System.currentTimeMillis();
+            lift.stop();
+        } else if (position == Position.TOP_FORWARD) {
+            //Time
+            startTime = System.currentTimeMillis();
+            currentTime = System.currentTimeMillis();
+
+            //Close claw
+            claw.control(Claw.State.CLOSE);
+
+            while (claw.claw.getPosition() != 0.5) {
+                // Refresh currentTime until wait reached
                 currentTime = System.currentTimeMillis();
+            }
 
-                while (currentTime - startTime < 500) {
-                    // Refresh currentTime until wait reached
-                    currentTime = System.currentTimeMillis();
-                }
-
-                //Open claw
-                claw.control(Claw.State.OPEN);
-
-            case MIDDLE_FORWARD:
-                //Time
-                startTime = System.currentTimeMillis();
+            while (currentTime - startTime < 250) {
+                // Refresh currentTime until wait reached
                 currentTime = System.currentTimeMillis();
+            }
 
-                //Close claw
-                claw.control(Claw.State.CLOSE);
-
-                while (currentTime - startTime < 250) {
-                    // Refresh currentTime until wait reached
-                    currentTime = System.currentTimeMillis();
-                }
-
-                //God mode
-                v4b.control(V4B.State.OPEN);
-                lift.control(SlidesTeleOp.State.MID);
-
-                //Time reset
-                startTime = System.currentTimeMillis();
-                currentTime = System.currentTimeMillis();
-
-                while (currentTime - startTime < 500) {
-                    // Refresh currentTime until wait reached
-                    currentTime = System.currentTimeMillis();
-                }
-
-                //Open claw
-                claw.control(Claw.State.OPEN);
-
-            case TOP_FORWARD:
-                //Time
-                startTime = System.currentTimeMillis();
-                currentTime = System.currentTimeMillis();
-
-                //Close claw
-                claw.control(Claw.State.CLOSE);
-
-                while (currentTime - startTime < 250) {
-                    // Refresh currentTime until wait reached
-                    currentTime = System.currentTimeMillis();
-                }
-
-                //God mode
+            //God mode
+            while (Math.floor(lift.getPosition()) > -70) {
                 v4b.control(V4B.State.OPEN);
                 lift.control(SlidesTeleOp.State.UP);
+            }
 
-                //Time reset
-                startTime = System.currentTimeMillis();
-                currentTime = System.currentTimeMillis();
-
-                while (currentTime - startTime < 500) {
-                    // Refresh currentTime until wait reached
-                    currentTime = System.currentTimeMillis();
-                }
-
-                //Open claw
-                claw.control(Claw.State.OPEN);
-
-            case PEAK_FORWARD:
-                //Time
-                startTime = System.currentTimeMillis();
-                currentTime = System.currentTimeMillis();
-
-                //Close claw
-                claw.control(Claw.State.CLOSE);
-
-                while (currentTime - startTime < 250) {
-                    // Refresh currentTime until wait reached
-                    currentTime = System.currentTimeMillis();
-                }
-
-                //God mode
-                v4b.control(V4B.State.OPEN);
-                lift.control(SlidesTeleOp.State.PEAK);
-
-                //Time reset
-                startTime = System.currentTimeMillis();
-                currentTime = System.currentTimeMillis();
-
-                while (currentTime - startTime < 500) {
-                    // Refresh currentTime until wait reached
-                    currentTime = System.currentTimeMillis();
-                }
-
-                //Open claw
-                claw.control(Claw.State.OPEN);
+            lift.stop();
         }
     }
 }
