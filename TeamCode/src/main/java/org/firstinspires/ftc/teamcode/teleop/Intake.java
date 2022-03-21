@@ -5,31 +5,33 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake {
-    HardwareMap hardwareMap;
     Gamepad gamepad;
     DcMotor intake_motor;
-    double intakePower;
+
+    enum Switch {
+        ON,
+        OFF
+    }
 
 
-    public Intake(Gamepad gamepad, double intakePower) {
+    public Intake(Gamepad gamepad, HardwareMap hardwareMap) {
         //Intake
         intake_motor = hardwareMap.get(DcMotor.class, "intake_motor");
 
-        this.intakePower = intakePower;
         this.gamepad = gamepad;
     }
 
-    public void control() {
-        if (gamepad.right_bumper) {
-            start();
+    public void control(Switch sw, double power) {
+        if (sw == sw.ON) {
+            start(power);
         }
-        else {
+        else if (sw == sw.OFF) {
             stop();
         }
     }
 
-    public void start() {
-        intake_motor.setPower(intakePower);
+    public void start(double power) {
+        intake_motor.setPower(power);
     }
 
     public void stop() {

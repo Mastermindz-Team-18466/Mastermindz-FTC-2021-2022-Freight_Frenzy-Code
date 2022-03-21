@@ -40,22 +40,22 @@ public class FieldOrientatedDriveTest extends LinearOpMode {
         imu.initialize(parameters);
 
         //left back motor
-        backLeftMotor = hardwareMap.get(DcMotor.class, "leftBack_drive");
+        backLeftMotor = hardwareMap.get(DcMotor.class, "leftRear");
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         //Right Back Motor
-        backRightMotor = hardwareMap.get(DcMotor.class, "rightBack_drive");
+        backRightMotor = hardwareMap.get(DcMotor.class, "rightRear");
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Left Front Motor
-        frontLeftMotor = hardwareMap.get(DcMotor.class, "leftFront_drive");
+        frontLeftMotor = hardwareMap.get(DcMotor.class, "leftFront");
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         //Right Back Motor
-        frontRightMotor = hardwareMap.get(DcMotor.class, "rightFront_drive");
+        frontRightMotor = hardwareMap.get(DcMotor.class, "rightFront");
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 

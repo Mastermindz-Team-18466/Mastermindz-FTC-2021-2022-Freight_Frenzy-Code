@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Claw {
-    HardwareMap hardwareMap;
     Servo claw;
     Gamepad gamepad;
 
@@ -14,7 +13,7 @@ public class Claw {
         CLOSE
     }
 
-    public Claw(Gamepad gamepad) {
+    public Claw(Gamepad gamepad, HardwareMap hardwareMap) {
         this.gamepad = gamepad;
 
         claw = hardwareMap.get(Servo.class, "claw");
@@ -25,7 +24,6 @@ public class Claw {
             claw.setDirection(Servo.Direction.FORWARD);
             claw.setPosition(0.7);
         } if (state == State.CLOSE) {
-            claw.setDirection(Servo.Direction.REVERSE);
             claw.setPosition(0.5);
         }
     }
