@@ -125,7 +125,7 @@ public class Outtake {
             }
 
             //God mode
-            while (Math.floor(lift.getPosition()) > -70) {
+            while (Math.floor(lift.getPosition()) > -60) {
                 v4b.control(V4B.State.OPEN);
                 lift.control(SlidesTeleOp.State.UP);
             }
