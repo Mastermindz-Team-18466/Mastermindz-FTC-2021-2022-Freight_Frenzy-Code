@@ -10,13 +10,11 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@Autonomous(name = "Barcode Autonomous")
-public class BarcodeAutonomous extends LinearOpMode {
+@Autonomous(name = "AutonomousMode")
+public class AutonomousMode extends LinearOpMode {
 
     public static BarcodeDetector pipeline;
     OpenCvCamera webcam;
-
-    String test = "test";
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -43,8 +41,32 @@ public class BarcodeAutonomous extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
-            telemetry.addData("PIPELINE", pipeline.position);
-            telemetry.update();
+            if(pipeline.position == BarcodeDetector.BarcodePosition.ONE){
+                telemetry.addData("POSITION", pipeline.position);
+                telemetry.update();
+            }
+            if (pipeline.position == BarcodeDetector.BarcodePosition.TWO){
+                telemetry.addData("POSITION", pipeline.position);
+                telemetry.update();
+            }
+            if(pipeline.position == BarcodeDetector.BarcodePosition.THREE){
+                telemetry.addData("POSITION", pipeline.position);
+                telemetry.update();
+            }
         }
     }
 }
+
+
+/*
+Trajectories.Action[] actions = new Trajectories.Action[]{
+        () -> Trajectories.moveForward(20),
+        () -> Trajectories.moveForward(20),
+        () -> Trajectories.strafeLeft(20)
+};
+
+for (Trajectories.Action action : actions) {
+    action.move();
+}
+
+ */

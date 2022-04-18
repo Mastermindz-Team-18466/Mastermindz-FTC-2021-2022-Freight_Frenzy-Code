@@ -65,7 +65,7 @@ public class SlidesTeleOp {
         double averagePosition = getPosition();
         double p = kp * (targetPosition - averagePosition);
 
-        System.out.println(averagePosition);
+        System.out.println(getCurrentPosition());
         setLiftMotorPower(p);
     }
 

@@ -1,17 +1,20 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.checkerframework.checker.units.qual.C;
+import org.firstinspires.ftc.teamcode.TeleOpFieldCentric;
 import org.firstinspires.ftc.teamcode.auto.Trajectories;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @TeleOp (name = "TeleOp", group = "Concept")
 //@Disabled
 public class TeleOpMode extends LinearOpMode {
 
-    FieldOrientatedDrive driver;
+    TeleOpFieldCentric driver;
     Trajectories trajectories;
     Intake intake;
     Claw claw;
@@ -21,7 +24,9 @@ public class TeleOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        driver = new FieldOrientatedDrive(gamepad1, hardwareMap);
+//        driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
+
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         intake = new Intake(gamepad1, hardwareMap);
         claw = new Claw(gamepad1, hardwareMap);
         carouselMechanism = new CarouselMechanism(gamepad1, hardwareMap);
@@ -41,9 +46,9 @@ public class TeleOpMode extends LinearOpMode {
             }
 
             if (gamepad1.left_bumper) {
-                intake.intake_motor.setPower(2);
+                intake.intake_motor.setPower(0.7);
             } else if (gamepad1.right_bumper) {
-                intake.intake_motor.setPower(-2);
+                intake.intake_motor.setPower(-0.7);
             } else {
                 intake.intake_motor.setPower(0);
             }
@@ -52,25 +57,22 @@ public class TeleOpMode extends LinearOpMode {
                 claw.control(Claw.State.OPEN);
             }
 
-            driver.move();
+//            driver.move();
+            drive.setWeightedDrivePower(
+                    new Pose2d(
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x,
+                            -gamepad1.right_stick_x
+                    )
+            );
+
+            drive.update();
 
             if (gamepad1.x) {
                 carouselMechanism.start();
             } else {
                 carouselMechanism.stop();
             }
-
-            /*
-            Trajectories.Action[] actions = new Trajectories.Action[]{
-                    () -> Trajectories.moveForward(100),
-                    () -> Trajectories.moveForward(100),
-                    () -> Trajectories.strafeLeft(50)
-            };
-
-            for (Trajectories.Action action : actions) {
-                action.move();
-            }
-            */
 
             telemetry.update();
         }

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Vector;
 
-@TeleOp (name = "Concept: FieldOrientatedDrive", group = "Test")
+@TeleOp(name = "Concept: FieldCentricMecanumTeleOp", group = "Test")
 //@Disabled
 public class FieldOrientatedDriveTest extends LinearOpMode {
     //The Stuff(variables)
@@ -31,9 +31,9 @@ public class FieldOrientatedDriveTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         //Set Up The Hardware
-        //IMU
+        //imu
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -68,7 +68,7 @@ public class FieldOrientatedDriveTest extends LinearOpMode {
             //gets angle from imu
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
             //creates vector
-            Vector vector = new Vector(15);
+            Vector vector = new Vector();
             vector.setCartesian(gamepad1.left_stick_x, gamepad1.left_stick_y);
             vector.rotateDegrees(angles.firstAngle - offset);
 

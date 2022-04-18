@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.MovingStatistics;
  * Wraps a motor instance to provide corrected velocity counts and allow reversing independently of the corresponding
  * slot's motor direction
  */
-public class Encoder {
+public class OdoEncoder {
     private final static int CPS_STEP = 0x10000;
 
     private static double inverseOverflow(double input, double estimate) {
@@ -44,7 +44,7 @@ public class Encoder {
     private MovingStatistics velocityEstimate;
     private double lastUpdateTime;
 
-    public Encoder(DcMotorEx motor, NanoClock clock) {
+    public OdoEncoder(DcMotorEx motor, NanoClock clock) {
         this.motor = motor;
         this.clock = clock;
 
@@ -55,7 +55,7 @@ public class Encoder {
         this.lastUpdateTime = clock.seconds();
     }
 
-    public Encoder(DcMotorEx motor) {
+    public OdoEncoder(DcMotorEx motor) {
         this(motor, NanoClock.system());
     }
 

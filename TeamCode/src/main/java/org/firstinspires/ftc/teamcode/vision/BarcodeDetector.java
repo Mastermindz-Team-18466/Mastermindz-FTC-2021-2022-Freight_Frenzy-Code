@@ -11,13 +11,16 @@ import org.openftc.easyopencv.OpenCvPipeline;
 public class BarcodeDetector extends OpenCvPipeline {
     private final Mat mat = new Mat();
 
+    boolean safe = true;
+
     public enum BarcodePosition {
+        DEFAULT,
         ONE,
         TWO,
         THREE
     }
 
-    public BarcodePosition position = BarcodePosition.THREE;
+    public BarcodePosition position = BarcodePosition.DEFAULT;
 
     @Override
     public Mat processFrame(Mat input) {
@@ -29,30 +32,31 @@ public class BarcodeDetector extends OpenCvPipeline {
 
         Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGB2YCrCb);
 
-        Mat matLeft = mat.submat(35, 65, 30, 57);
-        Mat matCenter = mat.submat(35, 65, 125, 152);
-        Mat matRight = mat.submat(35, 65, 220, 247);
+        Mat matLeft = mat.submat(0, 240, 0, 106);
+        Mat matCenter = mat.submat(0, 240, 106, 213);
+        Mat matRight = mat.submat(0, 240, 213, 320);
 
-        Imgproc.rectangle(mat, new Rect(30, 35, 27, 30), new Scalar(0, 255, 0));
-        Imgproc.rectangle(mat, new Rect(125, 35, 27, 30), new Scalar(0, 255, 0));
-        Imgproc.rectangle(mat, new Rect(220, 35, 27, 30), new Scalar(0, 255, 0));
+        Imgproc.rectangle(mat, new Rect(0, 0, 106, 240), new Scalar(0, 255, 0));
+        Imgproc.rectangle(mat, new Rect(106, 0, 107, 240), new Scalar(0, 255, 0));
+        Imgproc.rectangle(mat, new Rect(213, 0, 106, 240), new Scalar(0, 255, 0));
 
         double leftTotal = Core.sumElems(matLeft).val[2];
         double centerTotal = Core.sumElems(matCenter).val[2];
         double rightTotal = Core.sumElems(matRight).val[2];
 
-        if (leftTotal < centerTotal) {
-            if (leftTotal < rightTotal) {
-                position = BarcodePosition.ONE;
-            } else {
-                position = BarcodePosition.THREE;
-            }
-        } else {
-            if (centerTotal < rightTotal) {
-                position = BarcodePosition.TWO;
-            } else {
-                position = BarcodePosition.THREE;
-            }
+        if (leftTotal < centerTotal && leftTotal < rightTotal && safe == true) {
+            position = BarcodePosition.ONE;
+            safe = false;
+        }
+
+        else if (centerTotal < rightTotal && centerTotal < leftTotal && safe == true) {
+            position = BarcodePosition.TWO;
+            safe = false;
+        }
+
+        else if (rightTotal < centerTotal && rightTotal < leftTotal && safe == true) {
+            position = BarcodePosition.THREE;
+            safe = false;
         }
 
         return mat;

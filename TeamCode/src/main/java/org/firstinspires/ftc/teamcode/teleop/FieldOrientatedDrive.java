@@ -17,15 +17,17 @@ import org.firstinspires.ftc.teamcode.Vector;
 public class FieldOrientatedDrive {
     //The Stuff(variables)
     ElapsedTime runtime = new ElapsedTime();
-    Vector vector;
+    DcMotor backLeftMotor;
+    DcMotor frontLeftMotor;
+    DcMotor backRightMotor;
+    DcMotor frontRightMotor;
 
     BNO055IMU imu;
-    DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
     Orientation angles;
 
-    Gamepad gamepad;
-
     double offset = 0;
+
+    Gamepad gamepad;
 
     public FieldOrientatedDrive(Gamepad gamepad, HardwareMap hardwareMap) {
         //Set Up The Hardware
@@ -68,7 +70,7 @@ public class FieldOrientatedDrive {
         //gets angle from imu
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
         //creates vector
-        Vector vector = new Vector(15);
+        Vector vector = new Vector();
         vector.setCartesian(gamepad.left_stick_x, gamepad.left_stick_y);
         vector.rotateDegrees(angles.firstAngle - offset);
 
@@ -106,12 +108,5 @@ public class FieldOrientatedDrive {
         backLeftMotor.setPower(-backLeftPower);
         frontRightMotor.setPower(-frontRightPower);
         backRightMotor.setPower(-backRightPower);
-    }
-
-    public void finish() {
-        frontLeftMotor.setPower(0);
-        backLeftMotor.setPower(0);
-        frontRightMotor.setPower(0);
-        backRightMotor.setPower(0);
     }
 }
