@@ -56,10 +56,10 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(5, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(5, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(13, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(10, 0, 0);
 
-    public static double LATERAL_MULTIPLIER = 1.5865;
+    public static double LATERAL_MULTIPLIER = 1.67;
 
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
@@ -98,10 +98,10 @@ public class SampleMecanumDrive extends MecanumDrive {
 //
 //        imu = hardwareMap.get(BNO055IMU.class, "imu");
 //        imu.initialize(parameters);
-//
+
 //        // TODO: if your hub is mounted vertically, remap the IMU axes so that the z-axis points
-//        // upward (normal to the floor) using a command like the following:
-//        BNO055IMUUtil.remapAxes(imu, AxesOrder.ZXY, AxesSigns.NPN);
+        //upward (normal to the floor) using a command like the following:
+//        BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");

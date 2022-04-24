@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake {
     Gamepad gamepad;
-    DcMotor intake_motor;
+    public DcMotor intake_motor;
 
     enum Switch {
         ON,

@@ -1,13 +1,23 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.teleop.CarouselMechanism;
+import org.firstinspires.ftc.teamcode.teleop.Claw;
+import org.firstinspires.ftc.teamcode.teleop.Intake;
+import org.firstinspires.ftc.teamcode.teleop.Outtake;
+import org.firstinspires.ftc.teamcode.teleop.SlidesTeleOp;
+import org.firstinspires.ftc.teamcode.teleop.V4B;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.BarcodeDetector;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
 @Autonomous(name = "AutonomousMode")
@@ -15,21 +25,33 @@ public class AutonomousMode extends LinearOpMode {
 
     public static BarcodeDetector pipeline;
     OpenCvCamera webcam;
+    Intake intake;
+    Claw claw;
+    CarouselMechanism carouselMechanism;
+    Outtake outtake;
+    BarcodeDetector.BarcodePosition tsePosition;
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        intake = new Intake(gamepad1, hardwareMap);
+        claw = new Claw(gamepad1, hardwareMap);
+        carouselMechanism = new CarouselMechanism(gamepad1, hardwareMap);
+        outtake = new Outtake(new SlidesTeleOp(gamepad1, hardwareMap), new V4B(gamepad1, hardwareMap), new Claw(gamepad1, hardwareMap), gamepad1);
+
+        outtake.set(Outtake.Position.BACK);
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
         pipeline = new BarcodeDetector();
         webcam.setPipeline(pipeline);
 
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
-                webcam.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+            public void onOpened() {
+                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -38,35 +60,40 @@ public class AutonomousMode extends LinearOpMode {
             }
         });
 
+        while (!isStarted()) {
+            tsePosition = pipeline.scanBarcode();
+        }
+
         waitForStart();
 
-        while(opModeIsActive()){
-            if(pipeline.position == BarcodeDetector.BarcodePosition.ONE){
-                telemetry.addData("POSITION", pipeline.position);
-                telemetry.update();
-            }
-            if (pipeline.position == BarcodeDetector.BarcodePosition.TWO){
-                telemetry.addData("POSITION", pipeline.position);
-                telemetry.update();
-            }
-            if(pipeline.position == BarcodeDetector.BarcodePosition.THREE){
-                telemetry.addData("POSITION", pipeline.position);
-                telemetry.update();
-            }
+
+        long startTime = System.currentTimeMillis();
+        while (opModeIsActive()) {
+            drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(new Pose2d(11.5, -60, Math.toRadians(90)))
+//                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                            intake.intake_motor.setPower(0.7);
+//                        })
+//                        .UNSTABLE_addTemporalMarkerOffset(0.95, () -> {
+//                            if (tsePosition == BarcodeDetector.BarcodePosition.ONE) {
+//                                telemetry.addData("POSITION", pipeline.position);
+//                                telemetry.update();
+//                            }
+//                            if (tsePosition == BarcodeDetector.BarcodePosition.TWO) {
+//                                telemetry.addData("POSITION", pipeline.position);
+//                                telemetry.update();
+//                            }
+//                            if (tsePosition == BarcodeDetector.BarcodePosition.THREE) {
+//                                telemetry.addData("POSITION", pipeline.position);
+//                                telemetry.update();
+//                            }
+//                        })
+                    .lineToLinearHeading(new Pose2d(-1, -50, Math.toRadians(-68)))
+                    .splineTo(new Vector2d(46, -62.5), Math.toRadians(0))
+                    .setReversed(true)
+                    .splineTo(new Vector2d(-1, -50), Math.toRadians(-68 + 180))
+                    .setReversed(false)
+                    .build());
+
         }
     }
 }
-
-
-/*
-Trajectories.Action[] actions = new Trajectories.Action[]{
-        () -> Trajectories.moveForward(20),
-        () -> Trajectories.moveForward(20),
-        () -> Trajectories.strafeLeft(20)
-};
-
-for (Trajectories.Action action : actions) {
-    action.move();
-}
-
- */
