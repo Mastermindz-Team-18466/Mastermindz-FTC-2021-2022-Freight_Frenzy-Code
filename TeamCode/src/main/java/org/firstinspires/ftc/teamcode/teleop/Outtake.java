@@ -12,6 +12,7 @@ public class Outtake {
     public enum Position {
         START,
         BOTTOM_FORWARD,
+        AUTO_START,
         MIDDLE_FORWARD,
         TOP_FORWARD,
         PEAK_FORWARD,
@@ -81,6 +82,39 @@ public class Outtake {
 
             //Open claw
             claw.control(Claw.State.OPEN);
+        } else if(position == Position.AUTO_START){
+            //Time
+            startTime = System.currentTimeMillis();
+            currentTime = System.currentTimeMillis();
+
+            //Close claw
+            claw.control(Claw.State.CLOSE);
+
+            while (claw.claw.getPosition() != 0.5) {
+                // Refresh currentTime until wait reached
+                currentTime = System.currentTimeMillis();
+            }
+
+            //God mode
+            v4b.control(V4B.State.CLOSE);
+            while (Math.ceil(lift.getPosition()) < 0) {
+                lift.control(SlidesTeleOp.State.BOTTOM);
+            }
+
+            lift.stop();
+
+            //Time reset
+            startTime = System.currentTimeMillis();
+            currentTime = System.currentTimeMillis();
+
+            while (currentTime - startTime < 1000) {
+                // Refresh currentTime until wait reached
+                currentTime = System.currentTimeMillis();
+            }
+
+            //Open claw
+            claw.control(Claw.State.CLOSE);
+
         } else if (position == Position.BOTTOM_FORWARD) {
             //Time
             startTime = System.currentTimeMillis();
@@ -106,6 +140,32 @@ public class Outtake {
             }
 
             lift.stop();
+        } else if(position == Position.MIDDLE_FORWARD){
+            //Time
+            startTime = System.currentTimeMillis();
+            currentTime = System.currentTimeMillis();
+
+            //Close claw
+            claw.control(Claw.State.CLOSE);
+
+            while (claw.claw.getPosition() != 0.5) {
+                // Refresh currentTime until wait reached
+                currentTime = System.currentTimeMillis();
+            }
+
+            while (currentTime - startTime < 250) {
+                // Refresh currentTime until wait reached
+                currentTime = System.currentTimeMillis();
+            }
+
+            //God mode
+            while (Math.floor(lift.getPosition()) > -40) {
+                v4b.control(V4B.State.OPEN);
+                lift.control(SlidesTeleOp.State.MID);
+            }
+
+            lift.stop();
+
         } else if (position == Position.TOP_FORWARD) {
             //Time
             startTime = System.currentTimeMillis();

@@ -37,7 +37,7 @@ public class SlidesPID {
 
         switch (position) {
             case BOTTOM:
-                targetPosition = 0;
+                targetPosition = 20;
                 break;
 
             case MIDDLE:

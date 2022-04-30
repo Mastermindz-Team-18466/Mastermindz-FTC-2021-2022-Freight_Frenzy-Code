@@ -21,8 +21,8 @@ public class CarouselMechanism {
     }
 
     public void start() {
-        carouselServo1.setPower(1);
-        carouselServo2.setPower(1);
+        carouselServo1.setPower(-1);
+        carouselServo2.setPower(-1);
     }
 
     public void stop() {

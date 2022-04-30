@@ -17,16 +17,25 @@ public class MeepMeepTesting {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Required: Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(45.92255419789212, 45.92255419789212, 2.8, Math.toRadians(278.20567837774456), 12.7)
+                .setConstraints(45.92255419789212, 45.92255419789212, 4, 4, 13.07)
                 // Option: Set theme. Default = ColorSchemeRedDark()
                 .setColorScheme(new ColorSchemeRedDark())
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(11.5, -60, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(-1, -50, Math.toRadians(-68)))
+                        drive.trajectorySequenceBuilder(new Pose2d(12, -66, Math.toRadians(90
+                        ))
+)
+                                .lineToLinearHeading(new Pose2d(-3, -46.5, Math.toRadians(-68)))
                                 .splineTo(new Vector2d(46, -62.5), Math.toRadians(0))
                                 .setReversed(true)
-                                .splineTo(new Vector2d(-1, -50), Math.toRadians(-68+180))
+                                .splineTo(new Vector2d(-3, -46.5), Math.toRadians(-68+180))
                                 .setReversed(false)
+                                .splineTo(new Vector2d(46, -62.5), Math.toRadians(0))
+                                .setReversed(true)
+                                .splineTo(new Vector2d(-3, -46.5), Math.toRadians(-68+180))
+                                .setReversed(false)
+                                .splineTo(new Vector2d(46, -62.5), Math.toRadians(0))
+                                .setReversed(true)
+                                .splineTo(new Vector2d(-3, -46.5), Math.toRadians(-68+180))
                                 .build()
                 );
 

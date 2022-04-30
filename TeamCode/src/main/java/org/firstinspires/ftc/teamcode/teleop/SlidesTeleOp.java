@@ -44,6 +44,9 @@ public class SlidesTeleOp {
         } else if (state == State.UP) {
             targetPosition = -60;
             move(-60);
+        } else if (state == State.MID){
+            targetPosition = -40;
+            move(-40);
         }
     }
 
