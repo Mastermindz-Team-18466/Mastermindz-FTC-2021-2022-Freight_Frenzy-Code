@@ -21,6 +21,7 @@ public class TeleOpMode extends LinearOpMode {
     CarouselMechanism carouselMechanism;
     SlidesTeleOp slides;
     Outtake outtake;
+    Outtake2 outtake2;
 
     @Override
     public void runOpMode() {
@@ -31,6 +32,7 @@ public class TeleOpMode extends LinearOpMode {
         claw = new Claw(gamepad1, hardwareMap);
         carouselMechanism = new CarouselMechanism(gamepad1, hardwareMap);
         outtake = new Outtake(new SlidesTeleOp(gamepad1, hardwareMap), new V4B(gamepad1, hardwareMap), new Claw(gamepad1, hardwareMap), gamepad1);
+        outtake2 = new Outtake2(hardwareMap);
 
         outtake.set(Outtake.Position.BACK);
 
@@ -38,11 +40,11 @@ public class TeleOpMode extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (gamepad1.b) {
-                outtake.set(Outtake.Position.BACK);
+                outtake2.setTargetLiftPos(Outtake2.liftPos.BOTTOM);
             } else if (gamepad1.dpad_down) {
                 outtake.set(Outtake.Position.BOTTOM_FORWARD);
             } else if (gamepad1.dpad_up) {
-                outtake.set(Outtake.Position.TOP_FORWARD);
+                outtake2.setTargetLiftPos(Outtake2.liftPos.TOP);
             }
 
             if (gamepad1.left_bumper) {
@@ -79,6 +81,8 @@ public class TeleOpMode extends LinearOpMode {
 
         telemetry.addData(">", "Done");
         telemetry.update();
+
+        outtake2.update();
 
     }
 }

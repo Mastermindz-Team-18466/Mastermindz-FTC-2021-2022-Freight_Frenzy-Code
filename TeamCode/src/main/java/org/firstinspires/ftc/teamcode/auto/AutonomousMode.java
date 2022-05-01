@@ -69,6 +69,8 @@ public class AutonomousMode extends LinearOpMode {
 
         while (!isStarted()) {
             tsePosition = pipeline.scanBarcode();
+            telemetry.addData("POSITION", pipeline.position);
+            telemetry.update();
         }
 
         waitForStart();
@@ -80,18 +82,12 @@ public class AutonomousMode extends LinearOpMode {
 
                     if (tsePosition == BarcodeDetector.BarcodePosition.ONE) {
                         outtake.set(Outtake.Position.BOTTOM_FORWARD);
-                        telemetry.addData("POSITION", pipeline.position);
-                        telemetry.update();
                     }
                     if (tsePosition == BarcodeDetector.BarcodePosition.TWO) {
                         outtake.set(Outtake.Position.MIDDLE_FORWARD);
-                        telemetry.addData("POSITION", pipeline.position);
-                        telemetry.update();
                     }
                     if (tsePosition == BarcodeDetector.BarcodePosition.THREE) {
                         outtake.set(Outtake.Position.TOP_FORWARD);
-                        telemetry.addData("POSITION", pipeline.position);
-                        telemetry.update();
                     }
 
                 })
