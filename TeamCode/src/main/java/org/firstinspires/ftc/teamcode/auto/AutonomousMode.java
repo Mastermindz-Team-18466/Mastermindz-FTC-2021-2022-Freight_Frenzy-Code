@@ -40,9 +40,6 @@ public class AutonomousMode extends LinearOpMode {
         carouselMechanism = new CarouselMechanism(gamepad1, hardwareMap);
         outtake2 = new Outtake2(hardwareMap, new Claw(gamepad1, hardwareMap), new V4B(gamepad1, hardwareMap), new Intake(gamepad1, hardwareMap));
 
-        outtake2.setOuttakePos(Outtake2.outtakePosEnum.BOTTOM_CLOSE);
-        outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_OPEN);
-
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
@@ -66,40 +63,40 @@ public class AutonomousMode extends LinearOpMode {
         Vector2d warehouse = new Vector2d(46, -62.5);
         drive.setPoseEstimate(startPose);
 
-        outtake2.setOuttakePos(Outtake2.outtakePosEnum.BOTTOM_CLOSE);
-        outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_OPEN);
-
-
-        waitForStart();
-        if (isStopRequested()) return;
 
         TrajectorySequence trajStart = drive.trajectorySequenceBuilder(startPose)
-                .UNSTABLE_addTemporalMarkerOffset(1.5, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
 
-                    if (tsePosition == BarcodeDetector.BarcodePosition.ONE) {
-                        outtake2.setOuttakePos(Outtake2.outtakePosEnum.BOTTOM_OPEN);
-                        outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
-                    }
-                    if (tsePosition == BarcodeDetector.BarcodePosition.TWO) {
-                        outtake2.setOuttakePos(Outtake2.outtakePosEnum.MID);
-                        outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
-                    }
-                    if (tsePosition == BarcodeDetector.BarcodePosition.THREE) {
-                        outtake2.setOuttakePos(Outtake2.outtakePosEnum.TOP);
-                        outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
-                    }
+                    outtake2.setOuttakePos(Outtake2.outtakePosEnum.MID);
+                    outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
+
+//                    if (tsePosition == BarcodeDetector.BarcodePosition.ONE) {
+//                        outtake2.setOuttakePos(Outtake2.outtakePosEnum.BOTTOM_OPEN);
+//                        outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
+//                    }
+//                    else if (tsePosition == BarcodeDetector.BarcodePosition.TWO) {
+//                        outtake2.setOuttakePos(Outtake2.outtakePosEnum.MID);
+//                        outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
+//                    }
+//                    else if (tsePosition == BarcodeDetector.BarcodePosition.THREE) {
+//                        outtake2.setOuttakePos(Outtake2.outtakePosEnum.TOP);
+//                        outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
+//                    }
 
                 })
 
-                .UNSTABLE_addTemporalMarkerOffset(3.5, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(5, () -> {
                     outtake2.setOuttakePos(Outtake2.outtakePosEnum.BOTTOM_CLOSE);
                     outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_OPEN);
                 })
-                .waitSeconds(0.2)
-                .lineToLinearHeading(hubPose)
-                .waitSeconds(1.7)
-                .splineTo(warehouse, Math.toRadians(0))
+                .waitSeconds(10)
                 .build();
+
+        outtake2.setOuttakePos(Outtake2.outtakePosEnum.BOTTOM_CLOSE);
+        outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_OPEN);
+
+        waitForStart();
+        if (isStopRequested()) return;
 
 
         drive.followTrajectorySequenceAsync(trajStart);
