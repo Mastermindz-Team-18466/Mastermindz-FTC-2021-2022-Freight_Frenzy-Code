@@ -18,7 +18,6 @@ public class TeleOpMode extends LinearOpMode {
     Claw claw;
     CarouselMechanism carouselMechanism;
     SlidesTeleOp slides;
-    Outtake outtake;
     Outtake2 outtake2;
 
     @Override
@@ -29,36 +28,37 @@ public class TeleOpMode extends LinearOpMode {
         intake = new Intake(gamepad1, hardwareMap);
         claw = new Claw(gamepad1, hardwareMap);
         carouselMechanism = new CarouselMechanism(gamepad1, hardwareMap);
-        outtake = new Outtake(new SlidesTeleOp(gamepad1, hardwareMap), new V4B(gamepad1, hardwareMap), new Claw(gamepad1, hardwareMap), gamepad1);
-        outtake2 = new Outtake2(hardwareMap, new Claw(gamepad1, hardwareMap), new V4B(gamepad1, hardwareMap));
+        outtake2 = new Outtake2(hardwareMap, new Claw(gamepad1, hardwareMap), new V4B(gamepad1, hardwareMap), new Intake(gamepad1, hardwareMap));
 
-        outtake.set(Outtake.Position.BACK);
+        outtake2.setOuttakePos(Outtake2.outtakePosEnum.BOTTOM_CLOSE);
+        outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_OPEN);
 
         waitForStart();
 
         while (opModeIsActive()) {
-            if (gamepad1.b) {
-                outtake2.setTargetLiftPos(Outtake2.liftPos.BOTTOM);
-                outtake2.setOuttakePos(Outtake2.outtakePosEnum.CLOSE);
-                outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_OPEN);
-            } else if (gamepad1.dpad_down) {
-                outtake.set(Outtake.Position.BOTTOM_FORWARD);
-            } else if (gamepad1.dpad_up) {
-                outtake2.setTargetLiftPos(Outtake2.liftPos.TOP);
-                outtake2.setOuttakePos(Outtake2.outtakePosEnum.OPEN);
+            if (gamepad1.dpad_up) {
+                outtake2.setOuttakePos(Outtake2.outtakePosEnum.TOP);
+                outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
+            } else if (gamepad1.back){
+                outtake2.setOuttakePos(Outtake2.outtakePosEnum.TSE);
+                outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
+            } else if (gamepad1.dpad_down){
+                outtake2.setOuttakePos(Outtake2.outtakePosEnum.BOTTOM_OPEN);
+                outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
+            } else if (gamepad1.dpad_right){
+                outtake2.setOuttakePos(Outtake2.outtakePosEnum.MID);
                 outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
             }
 
             if (gamepad1.left_bumper) {
-                intake.intake_motor.setPower(0.7);
+                intake.intake_motor.setPower(1);
             } else if (gamepad1.right_bumper) {
-                intake.intake_motor.setPower(-0.7);
-            } else {
-                intake.intake_motor.setPower(0);
+                intake.intake_motor.setPower(-1);
             }
 
             if (gamepad1.right_trigger > 0.75) {
-                claw.control(Claw.State.OPEN);
+                outtake2.setOuttakePos(Outtake2.outtakePosEnum.BOTTOM_CLOSE);
+                outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_OPEN);
             }
 
 //            driver.move();
@@ -78,6 +78,7 @@ public class TeleOpMode extends LinearOpMode {
                 carouselMechanism.stop();
             }
 
+            telemetry.addData("IntakePower", intake.intake_motor.getPower());
             telemetry.update();
             outtake2.update();
         }

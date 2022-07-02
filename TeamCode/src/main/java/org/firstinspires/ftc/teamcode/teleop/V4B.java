@@ -27,8 +27,8 @@ public class V4B {
         if (state == State.CLOSE) {
             rightV4B.setDirection(Servo.Direction.FORWARD);
             leftV4B.setDirection(Servo.Direction.REVERSE);
-            rightV4B.setPosition(0.05);
-            leftV4B.setPosition(0.05);
+            rightV4B.setPosition(0.025);
+            leftV4B.setPosition(0.025);
         } else if (state == State.SHARED) {
             rightV4B.setDirection(Servo.Direction.FORWARD);
             leftV4B.setDirection(Servo.Direction.REVERSE);
@@ -37,8 +37,8 @@ public class V4B {
         } else if (state == State.OPEN) {
             rightV4B.setDirection(Servo.Direction.FORWARD);
             leftV4B.setDirection(Servo.Direction.REVERSE);
-            rightV4B.setPosition(0.7);
-            leftV4B.setPosition(0.7);
+            rightV4B.setPosition(0.67);
+            leftV4B.setPosition(0.67);
         }
     }
 }
