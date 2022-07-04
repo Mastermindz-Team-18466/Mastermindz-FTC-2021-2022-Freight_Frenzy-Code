@@ -15,27 +15,23 @@ public class MeepMeepTesting {
         // With a field size of 800 pixels
         MeepMeep meepMeep = new MeepMeep(800);
 
+        Pose2d startPose = new Pose2d(10, -66, Math.toRadians(90));
+        Pose2d hubPose = new Pose2d(-2, -50, Math.toRadians(-68));
+        Vector2d hubVector = new Vector2d(-2, -50);
+        Vector2d warehouse = new Vector2d(46, -62.5);
+
+
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Required: Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(45.92255419789212, 45.92255419789212, 4, 4, 13.07)
                 // Option: Set theme. Default = ColorSchemeRedDark()
                 .setColorScheme(new ColorSchemeRedDark())
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(12, -66, Math.toRadians(90
-                        ))
-)
-                                .lineToLinearHeading(new Pose2d(-3, -46.5, Math.toRadians(-68)))
-                                .splineTo(new Vector2d(46, -62.5), Math.toRadians(0))
+                        drive.trajectorySequenceBuilder(hubPose)
+                                .splineTo(warehouse, Math.toRadians(0))
+                                .waitSeconds(0.1)
                                 .setReversed(true)
-                                .splineTo(new Vector2d(-3, -46.5), Math.toRadians(-68+180))
-                                .setReversed(false)
-                                .splineTo(new Vector2d(46, -62.5), Math.toRadians(0))
-                                .setReversed(true)
-                                .splineTo(new Vector2d(-3, -46.5), Math.toRadians(-68+180))
-                                .setReversed(false)
-                                .splineTo(new Vector2d(46, -62.5), Math.toRadians(0))
-                                .setReversed(true)
-                                .splineTo(new Vector2d(-3, -46.5), Math.toRadians(-68+180))
+                                .splineTo(hubVector, Math.toRadians(-68 + 180))
                                 .build()
                 );
 
