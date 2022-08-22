@@ -31,6 +31,7 @@ public class Outtake2 {
     public enum outtakePosEnum {
         BOTTOM_CLOSE,
         BOTTOM_OPEN,
+        TSE_OPEN,
         MID,
         TOP,
         SHARED,
@@ -135,6 +136,31 @@ public class Outtake2 {
                             v4b.leftV4B.setDirection(Servo.Direction.REVERSE);
                             v4b.rightV4B.setPosition(0.45);
                             v4b.leftV4B.setPosition(0.45);
+                        }
+                        break;
+                }
+                break;
+            case TSE_OPEN:
+                switch (outtakeInstructions) {
+                    case CLAW_CLOSED:
+                        claw.control(Claw.State.CLOSE);
+                        prevAction = System.currentTimeMillis();
+                        intakePower = -1;
+                        outtakeInstructions = outtakeInstructions.V4B_OPEN;
+                        break;
+                    case V4B_OPEN:
+                        if (System.currentTimeMillis() - prevAction > 250) {
+                            targetLiftPos = liftPos.BOTTOM;
+                            v4b.control(V4B.State.OPEN);
+                            intakePower = 0;
+                            prevAction = System.currentTimeMillis();
+                            outtakeInstructions = outtakeInstructions.CLAW_OPEN;
+                        }
+                        break;
+                    case CLAW_OPEN:
+                        if (System.currentTimeMillis() - prevAction > 1000) {
+                            claw.control(Claw.State.OPEN);
+                            prevAction = System.currentTimeMillis();
                         }
                         break;
                 }

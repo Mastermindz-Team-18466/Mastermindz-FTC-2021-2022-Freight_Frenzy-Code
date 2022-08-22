@@ -48,6 +48,9 @@ public class TeleOpMode extends LinearOpMode {
             } else if (gamepad1.dpad_right){
                 outtake2.setOuttakePos(Outtake2.outtakePosEnum.MID);
                 outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
+            } else if (gamepad1.y) {
+                outtake2.setOuttakePos(Outtake2.outtakePosEnum.TSE_OPEN);
+                outtake2.setOuttakeInstructions(Outtake2.outtakeInstructionsEnum.CLAW_CLOSED);
             }
 
             if (gamepad1.left_bumper) {

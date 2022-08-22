@@ -14,6 +14,7 @@ public class V4B {
         OPEN,
         CLOSE,
         SHARED
+
     }
 
     public V4B(Gamepad gamepad, HardwareMap hardwareMap) {
