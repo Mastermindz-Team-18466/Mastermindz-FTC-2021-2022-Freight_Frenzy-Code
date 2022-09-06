@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -12,9 +13,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 
-
+@Config
 public class TeleOpFieldCentric {
     SampleMecanumDrive drive;
     Gamepad gamepad;
@@ -22,7 +26,8 @@ public class TeleOpFieldCentric {
     BNO055IMU imu;
     Orientation angles;
 
-    double offset = 0;
+    TeleOpMode teleOpMode;
+
 
 
     public TeleOpFieldCentric(HardwareMap hardwareMap, SampleMecanumDrive drive, Gamepad gamepad) {
@@ -41,19 +46,42 @@ public class TeleOpFieldCentric {
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
     }
 
 
     public void move() {
+        Pose2d poseEstimate = drive.getPoseEstimate();
 
-//        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
-//
+        // Create a vector from the gamepad x/y inputs
+        // Then, rotate that vector by the inverse of that heading
+        Vector2d input = new Vector2d(
+                    -gamepad.left_stick_y,
+                    -gamepad.left_stick_x
+        ).rotated(-poseEstimate.getHeading());
+
+        // Pass in the rotated input + right stick value for rotation
+        // Rotation is not part of the rotated input thus must be passed in separately
+        drive.setWeightedDrivePower(
+                new Pose2d(
+                        input.getX(),
+                        input.getY(),
+                        -gamepad.right_stick_x
+                )
+        );
+
+        if (gamepad.a) {
+            drive.setPoseEstimate(new Pose2d (poseEstimate.getX(), poseEstimate.getY(), 0));
+        }
+
+
 //        // Create a vector from the gamepad x/y inputs
 //        // Then, rotate that vector by the inverse of that heading
 //        Vector2d input = new Vector2d(
 //                -gamepad.left_stick_y,
 //                -gamepad.left_stick_x
-//        ).rotated(angles.firstAngle);
+//        ).rotated(-angles.firstAngle);
 //
 //        // Pass in the rotated input + right stick value for rotation
 //        // Rotation is not part of the rotated input thus must be passed in separately
@@ -64,7 +92,7 @@ public class TeleOpFieldCentric {
 //                        -gamepad.right_stick_x
 //                )
 //        );
-//
+
 
         drive.update();
     }

@@ -17,8 +17,9 @@ public class MeepMeepTesting {
 
         Pose2d startPose = new Pose2d(10, -66, Math.toRadians(90));
         Pose2d hubPose = new Pose2d(-2, -50, Math.toRadians(-68));
+        Pose2d warehousePose = new Pose2d(50, -62.5);
         Vector2d hubVector = new Vector2d(-2, -50);
-        Vector2d warehouse = new Vector2d(46, -62.5);
+        Vector2d warehouse = new Vector2d(50, -62.5);
 
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -27,12 +28,17 @@ public class MeepMeepTesting {
                 // Option: Set theme. Default = ColorSchemeRedDark()
                 .setColorScheme(new ColorSchemeRedDark())
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(hubPose)
-                                .splineTo(warehouse, Math.toRadians(0))
-                                .waitSeconds(0.1)
+                        drive.trajectorySequenceBuilder(warehousePose)
                                 .setReversed(true)
-                                .splineTo(hubVector, Math.toRadians(-68 + 180))
+                                .splineTo(hubVector, Math.toRadians(-68+180))
+                                .setReversed(false)
+                                .splineTo(warehouse, Math.toRadians(0))
                                 .build()
+//                                .splineTo(warehouse, Math.toRadians(0))
+//                                .waitSeconds(0.1)
+//                                .setReversed(true)
+//                                .splineTo(hubVector, Math.toRadians(-68 + 180))
+//                                .build()
                 );
 
         // Set field image

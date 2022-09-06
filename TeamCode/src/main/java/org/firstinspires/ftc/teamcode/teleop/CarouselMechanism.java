@@ -15,8 +15,6 @@ public class CarouselMechanism {
         carouselServo1 = hardwareMap.crservo.get("carouselServo1");
         carouselServo2 = hardwareMap.crservo.get("carouselServo2");
 
-        carouselServo2.setDirection(DcMotorSimple.Direction.REVERSE);
-
         this.gamepad = gamepad;
     }
 

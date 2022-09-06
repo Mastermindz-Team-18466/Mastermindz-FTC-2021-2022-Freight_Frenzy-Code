@@ -13,7 +13,8 @@ public class V4B {
     public enum State {
         OPEN,
         CLOSE,
-        SHARED
+        SHARED,
+        TSE_COLLECT
 
     }
 
@@ -40,6 +41,11 @@ public class V4B {
             leftV4B.setDirection(Servo.Direction.REVERSE);
             rightV4B.setPosition(0.67);
             leftV4B.setPosition(0.67);
+        } else if (state == State.TSE_COLLECT) {
+            rightV4B.setDirection(Servo.Direction.FORWARD);
+            leftV4B.setDirection(Servo.Direction.REVERSE);
+            rightV4B.setPosition(0.705);
+            leftV4B.setPosition(0.705);
         }
     }
 }
